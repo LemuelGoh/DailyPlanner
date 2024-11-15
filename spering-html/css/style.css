@@ -876,3 +876,87 @@ a:focus {
           transform: rotate(-45deg) translate(8px, -8px);
 }
 /*# sourceMappingURL=style.css.map */
+
+.pricing-section {
+  text-align: center;
+  padding: 50px;
+  background-color: #f9f9f9;
+  color: #000; /* Black font color for the entire section */
+}
+
+.pricing-section h2 {
+  color: #000; /* Ensure "Our Pricing Plans" is black */
+}
+
+.pricing-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  background-color: #eaeaea; /* Slightly grey background for container */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.pricing-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  width: 300px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  color: #000;
+}
+
+.pricing-card.featured {
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  background-color: #f5f5f5; /* Light blue to highlight the featured plan */
+}
+
+.pricing-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  color: #000; /* Black font color */
+}
+
+.pricing-card .price {
+  font-size: 2em;
+  color: #007bff; /* Slightly colored price to stand out */
+  margin: 10px 0;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  color: #000; /* Black font color */
+}
+
+.pricing-card ul li {
+  margin-bottom: 10px;
+}
+
+.pricing-card .btn {
+  display: block;
+  width: 100%;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 20px; /* Adds space above the button */
+}
+
+.pricing-card .btn:hover {
+  background-color: #0056b3;
+}
+
+.pricing-card ul {
+  flex-grow: 1; /* Allow the list to grow to take up available space */
+}
