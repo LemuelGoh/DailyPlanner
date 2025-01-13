@@ -875,17 +875,17 @@ a:focus {
   -webkit-transform: rotate(-45deg) translate(8px, -8px);
           transform: rotate(-45deg) translate(8px, -8px);
 }
-/*# sourceMappingURL=style.css.map */
 
 .pricing-section {
   text-align: center;
   padding: 50px;
-  background-color: #f9f9f9;
+  background-color: #1a2e35;
   color: #000; /* Black font color for the entire section */
 }
 
 .pricing-section h2 {
-  color: #000; /* Ensure "Our Pricing Plans" is black */
+  color: #ffffff; /* Ensure "Our Pricing Plans" is black */
+  font-weight: bold;
 }
 
 .pricing-container {
@@ -893,7 +893,6 @@ a:focus {
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
-  background-color: #eaeaea; /* Slightly grey background for container */
   padding: 20px;
   border-radius: 8px;
 }
@@ -959,4 +958,47 @@ a:focus {
 
 .pricing-card ul {
   flex-grow: 1; /* Allow the list to grow to take up available space */
+}
+
+.login-section {
+  text-align: center;
+  padding: 200px;
+  background-color: #1cbbb4;
+  color: #000; /* Black font color for the entire section */
+}
+
+.form-group label{
+  text-align: left;
+  width: 100%;
+  color: #fff
+}
+
+.form-control {
+  text-align: left;
+}
+
+.login_container{
+  background-color:#1a2e35 ;
+  padding: 50px;
+}
+
+.login_heading h2 {
+  color: white;
+}
+
+.login_box .btn{
+  width: 32.6%;
+  height: 80px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 20px; /* Adds space above the button */
+}
+
+.login_box .btn:hover {
+  background-color: #0056b3;
 }
