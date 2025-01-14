@@ -1,3 +1,10 @@
+// //check if user logged in
+// if(!localStorage.getItem("user")) {
+//     alert("Please Log In before using the calendar!");
+//     window.location.href = "login.html";
+// }
+// //--------------
+
 let currentYear = new Date().getFullYear();
 const yearlyCalendarContainer = document.getElementById("yearlyCalendarContainer");
 const yearDisplay = document.getElementById("yearDisplay");
@@ -68,25 +75,12 @@ function changeYear(offset) {  //onclick -1 / +1
     generateYearCalendar(currentYear);
     addDaysEventListener();
 }
-// drop down bar
-document.querySelector(".iconBorder").addEventListener("click",displayDropdown);
-function displayDropdown() {
-    document.querySelector(".profileDropDown").classList.toggle("showProfileDropDown");
-    document.querySelector(".email").innerHTML = `Email => ${localStorage.getItem("user")}`
-    document.querySelector(".iconBorder").classList.toggle("profileSelecting");
-    document.querySelector(".mediumBar").classList.toggle("hideMediumBar");
-}
 
-document.querySelector(".logout").addEventListener("click",logOut);
-function logOut() {
-    localStorage.removeItem("user");
-    window.location.href = "main.html";
-}
 //------------------
 generateYearCalendar(currentYear);
 addDaysEventListener();
 
-//addeventlistener for every btn
+// addeventlistener for every btn
 function addDaysEventListener(){
     const daysDiv = document.getElementsByClassName("day");
     for(let i = 0; i < daysDiv.length;i++) {

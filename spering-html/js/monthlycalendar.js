@@ -50,7 +50,7 @@ async function initTasksDate() {
     const filterYrMnth = tasksDate.filter(t => (t.year === year && t.month === month + 1) || t.repeat === "daily" || t.repeat === "monthly" || (t.month === month + 1 && t.repeat === "yearly"));
     
     const monthDiv = document.createElement("div");
-    monthDiv.className = "month";
+    monthDiv.className = "month-year";
 
     // Day names row
     const daysDiv = document.createElement("div");

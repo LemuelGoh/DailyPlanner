@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monthly Calendar</title>
-  <link rel="stylesheet" href="test.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yearly Calendar</title>
+    <link rel="stylesheet" href="test.css">
 </head>
 <body>
-  <div id="monthlyCalendarContainer"></div>
-  <div id="monthDisplay"></div>
-  <button id="prevMonth">Previous</button>
-  <button id="nextMonth">Next</button>
+    <!-- Dropdown and Profile Section -->
+    <div class="iconBorder">
+        <button>Profile</button>
+    </div>
 
-  <script src="test.js"></script>
+    <div class="profileDropDown">
+        <span class="email"></span>
+        <button class="logout">Logout</button>
+    </div>
+
+    <!-- Year Calendar Section -->
+    <section class="yearly-calendar">
+        <h2 id="yearDisplay"></h2> <!-- Current year display -->
+        <button id="prevYear" onclick="changeYear(-1)">Previous Year</button>
+        <button id="nextYear" onclick="changeYear(1)">Next Year</button>
+        <div id="yearlyCalendarContainer"></div> <!-- Yearly calendar container -->
+    </section>
+
+    <script src="test.js"></script>
 </body>
 </html>

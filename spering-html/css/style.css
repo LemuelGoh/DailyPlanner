@@ -1317,3 +1317,12 @@ a:focus {
   font-weight: bold;
   margin-bottom: 20px;
 }
+
+
+.calendar-section-year {
+  width: 100%;
+  background-color: #34495e;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+}

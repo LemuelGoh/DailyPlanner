@@ -1,28 +1,82 @@
-.month {
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+.yearlyCalendarContainer {
     display: flex;
-    flex-direction: column;
-  }
-  
-  .days {
+}
+
+.yearly-calendar {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-  }
-  
-  .day-name {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#yearDisplay {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.month {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.month h3 {
+    font-size: 1.5rem;
     font-weight: bold;
     text-align: center;
-  }
-  
-  .dayContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .tasksAmount {
-    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
     text-align: center;
-  }
-  
+}
+
+.day-name {
+    font-weight: bold;
+    background-color: #ecf0f1;
+    padding: 10px;
+}
+
+.day {
+    padding: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.day:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.emptyCell {
+    background-color: #ecf0f1;
+}
