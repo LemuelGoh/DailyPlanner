@@ -9,9 +9,10 @@
 
 #yearlyCalendarContainer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns for 3 months per row */
+    grid-template-columns: repeat(4, 1fr); /* 3 columns for 3 months per row */
     gap: 20px; /* Space between months */
     justify-content: center;
+    padding: 50px;
 }
 
 .month {
@@ -46,7 +47,7 @@
 }
 
 .day {
-    padding: 15px;
+    padding: 8px;
     cursor: pointer;
     background-color: #16a085;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;

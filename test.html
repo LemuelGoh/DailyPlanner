@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yearly Calendar</title>
-    <link rel="stylesheet" href="test.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Daily Calendar</title>
+  <link rel="stylesheet" href="test.css">
 </head>
 <body>
-    <!-- Dropdown and Profile Section -->
-    <div class="iconBorder">
-        <button>Profile</button>
+  <div id="loaderContainer" class="loader-container">
+    <div class="loader"></div>
+  </div>
+  <div id="dailyCalendarContainer">
+    <button id="prevDay">Previous Day</button>
+    <span id="dayDisplay"></span>
+    <button id="nextDay">Next Day</button>
+    <button id="addTaskButton">Add Task</button>
+
+    <div id="timeline"></div>
+
+    <!-- Manage Task Popup -->
+    <div id="manageTaskContainer" class="hide">
+      <h3>Manage Task</h3>
+      <div id="description"></div>
+      <div id="startTime"></div>
+      <div id="date"></div>
+      <div id="priority"></div>
+      <div id="repeat"></div>
+      <input type="checkbox" id="checkbox"> Completed
+      <button id="updateTaskButton">Update Task</button>
+      <button id="removeTaskButton">Remove Task</button>
+      <button id="close">Close</button>
     </div>
+  </div>
 
-    <div class="profileDropDown">
-        <span class="email"></span>
-        <button class="logout">Logout</button>
-    </div>
-
-    <!-- Year Calendar Section -->
-    <section class="yearly-calendar">
-        <h2 id="yearDisplay"></h2> <!-- Current year display -->
-        <button id="prevYear" onclick="changeYear(-1)">Previous Year</button>
-        <button id="nextYear" onclick="changeYear(1)">Next Year</button>
-        <div id="yearlyCalendarContainer"></div> <!-- Yearly calendar container -->
-    </section>
-
-    <script src="test.js"></script>
+  <script src="test.js"></script>
 </body>
 </html>

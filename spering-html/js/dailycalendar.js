@@ -15,7 +15,7 @@ else if(sessionStorage.getItem("storageRedirectDate")) {
  //convert utc to malaysia time
 dayDisplay.textContent = currentDate.toLocaleDateString('en-US', options);
 }
-// Sample tasks (you can replace this with tasks from your data source)
+
 const tasks = [
     { date: "-1", time: "-1", description: "-1", priority:"-1",completed:"-1",repeat:"-1", uid:"-1"},
 ];
@@ -64,18 +64,18 @@ function generateTimeline(dayTasks) {
     }
 }
 //loader
-function hideLoader() {
-    const loader = document.querySelector(".loader");
-    loader.style.display = "none";
-    const loaderContainer = document.getElementById("loaderContainer");
-    loaderContainer.style.display = "none";
-}
-function showLoader() {
-    const loader = document.querySelector(".loader");
-    loader.style.display = "flex";
-    const loaderContainer = document.getElementById("loaderContainer");
-    loaderContainer.style.display = "flex";
-}
+// function hideLoader() {
+//     const loader = document.querySelector(".loader");
+//     loader.style.display = "none";
+//     const loaderContainer = document.getElementById("loaderContainer");
+//     loaderContainer.style.display = "none";
+// }
+// function showLoader() {
+//     const loader = document.querySelector(".loader");
+//     loader.style.display = "flex";
+//     const loaderContainer = document.getElementById("loaderContainer");
+//     loaderContainer.style.display = "flex";
+// }
 //-----------------------
 //manage task
 function taskAddEventListener() {
@@ -174,14 +174,14 @@ function taskAddEventListener() {
         })
     }
 }
-document.getElementById("close").addEventListener("click",()=> {
-    const mainContainer = document.getElementById("dailyCalendarContainer");
-    const manageTaskContainer = document.getElementById("manageTaskContainer");
-    const addTaskBtn = document.getElementById("addTaskButton");
-    mainContainer.classList.remove("hide"); //show mainContainer
-    addTaskBtn.classList.remove("hide"); //show add task button
-    manageTaskContainer.classList.add("hide"); //hide manageTaskContainer
-})
+// document.getElementById("close").addEventListener("click",()=> {
+//     const mainContainer = document.getElementById("dailyCalendarContainer");
+//     const manageTaskContainer = document.getElementById("manageTaskContainer");
+//     const addTaskBtn = document.getElementById("addTaskButton");
+//     mainContainer.classList.remove("hide"); //show mainContainer
+//     addTaskBtn.classList.remove("hide"); //show add task button
+//     manageTaskContainer.classList.add("hide"); //hide manageTaskContainer
+// })
 //----------------------------
 function changeDay(offset) {
     currentDate.setDate(currentDate.getDate() + offset);
@@ -201,31 +201,7 @@ document.getElementById("prevDay").addEventListener("click",()=>{
 document.getElementById("nextDay").addEventListener("click",()=>{
     changeDay(1);
 })
-//----------------
-document.getElementById("addTaskButton").addEventListener("click", () => {
-    const taskTime = prompt("Enter task time (HH:MM, 24-hour format):");
-    const taskDescription = prompt("Enter task description:");
-    const priority = prompt("Priority: (high,medium,low)");
-    const repeat = prompt("Repeat: (yearly,monthly,daily, none)");
-    const taskDate = currentDate.toISOString().split("T")[0];
 
-    if (taskTime && taskDescription && priority && taskDate && repeat) {
-        const taskCol = collection(firestore,"users",localStorage.getItem("user"),"tasks");
-        addDoc(taskCol, {
-            Description:taskDescription,
-            StartTime:taskTime,
-            date:taskDate,
-            priority:priority,
-            completed:false,
-            repeat:repeat,
-        }).then((docRef) => {
-            alert
-            location.reload();
-          })
-    } else {
-        alert("Information is not completed!");
-    }
-});
 
 
 
@@ -238,4 +214,4 @@ const dayTasks = tasks.filter(t => (t.date === formattedDate) || (t.date.substri
 
 generateTimeline(dayTasks);
 taskAddEventListener();
-hideLoader();
+// hideLoader();

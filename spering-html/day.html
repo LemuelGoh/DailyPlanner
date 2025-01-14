@@ -22,7 +22,7 @@
   <link href="css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
-  <link href="css/yearly.css" rel="stylesheet" />
+  <link href="css/daily.css" rel="stylesheet" />
 
 </head>
 
@@ -107,19 +107,28 @@
 
   <!-- nav section -->
   <div class="main-container">
+    <!-- Sidebar Section -->
+    <aside class="sidebar">
+        <div class="sidebar-item">
+            <div class="lock-icon"><span class="premium-lock">🔒</span></div>
+        </div>
+        <div class="sidebar-item">
+            <div class="lock-icon"><span class="premium-lock">🔒</span></div>
+        </div>
+    </aside>
 
     <!-- Calendar Section -->
-    <section class="calendar-section-year">
+    <section class="calendar-section">
         <div class="calendar-header">
             <div class="nav-buttons">
                 <button>Day</button>
                 <button>Week</button>
                 <button onclick="redirectToUserPage()">Month</button>
-                <button>Year</button>
+                <button onclick="redirectToYearlyPage()">Year</button>
                 <div class="calendar-controls">
-                    <button id="prevYear" onclick="changeYear(-1)">&larr;</button>
-                    <span id="yearDisplay"></span>
-                    <button id="nextYear" onclick="changeYear(1)">&rarr;</button>
+                    <button id="prevDay">&larr;</button>
+                    <span id="dayDisplay"></span>
+                    <button id="nextDay">&rarr;</button>
                 </div>
             </div>
 
@@ -139,10 +148,9 @@
               </div>
         </div>
 
-        <section class="yearly-calendar">
-            <div id="yearlyCalendarContainer"></div> <!-- Yearly calendar container -->
-        </section>
-
+        <div id="dailyCalendarContainer">
+            <div id="timeline"></div>
+        </div>
     </section>
     </div>
   <!-- end nav section -->
@@ -289,7 +297,7 @@
 
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
-  <script src="js/yearlycalendar.js"></script>
+  <script src="js/dailycalendar.js"></script>
   <script src="js/custom.js"></script>
 
 
