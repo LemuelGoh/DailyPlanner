@@ -12,7 +12,7 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
 
-  <title>Spering</title>
+  <title>PlanLah</title>
 
   <!-- bootstrap core css -->
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
@@ -87,8 +87,11 @@
   <section class="top-options">
     <div class="container-fluid">
         <div class="top-options-content">
-            <button class="option-button" id="settings-btn">
-              <span class="icon">⚙️</span> Settings
+            <button class="option-button-left" id="profile-btn">
+              <span class="icon">⬆️</span> Subscribe
+            </button>
+            <button class="option-button" id="profile-btn">
+              <span class="icon">🪪</span> Profile
             </button>
             <button class="option-button" id="settings-btn">
                 <span class="icon">⚙️</span> Settings
@@ -121,9 +124,9 @@
                 <button>Month</button>
                 <button>Year</button>
                 <div class="calendar-controls">
-                    <button>&larr;</button>
-                    <span>2024 November</span>
-                    <button>&rarr;</button>
+                    <button id="prevMonth">&larr;</button>
+                    <span id="monthDisplay"></span>
+                    <button id="nextMonth">&rarr;</button>
                 </div>
             </div>
 
@@ -153,6 +156,9 @@
             <div class="calendar-cell">Saturday</div>
             <!-- Add more cells for dates -->
         </div>
+        <div id="monthlyCalendarContainer"></div>
+        <div id="monthDisplay"></div>
+
     </section>
     </div>
   <!-- end nav section -->
@@ -299,10 +305,10 @@
 
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
+  <script src="js/monthlycalendar.js"></script>
   <script src="js/custom.js"></script>
 
 
-</body>
 </body>
 
 </html>

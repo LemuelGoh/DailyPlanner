@@ -1068,7 +1068,7 @@ a:focus {
 }
 
 .sidebar-item {
-  background-color: #ecf0f1;
+  background-color: lightsteelblue;
   margin: 20px 0;
   height: 500px;  
   text-align: center;
@@ -1126,11 +1126,21 @@ a:focus {
 }
 
 .calendar-cell {
-  background-color: white;
-  color: black;
-  padding: 10px;
+  background-color: #ffffff; /* Clean white background */
+  color: #34495e; /* Dark grey text for better readability */
+  padding: 9px;
   text-align: center;
   border: 1px solid #bdc3c7;
+  border-radius: 8px; /* Rounded corners for a softer look */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  font-family: 'Poppins', sans-serif; /* Modern, rounded font */
+  font-size: 1.1rem; /* Slightly larger font for better legibility */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.calendar-cell:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .search-container {
@@ -1184,14 +1194,45 @@ a:focus {
   display: flex;
   align-items: center;
   gap: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+}
+
+.option-button-left {
+  background-color: #34495e;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .option-button .icon {
   font-size: 16px;
 }
 
+.option-button-left .icon {
+  font-size: 16px;
+}
+
 .option-button:hover {
   background-color: #1abc9c;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.option-button-left:hover {
+  background-color: #1abc9c;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .lock-icon {
@@ -1203,4 +1244,76 @@ a:focus {
 
 .premium-lock {
   font-size: 5rem; /* You can adjust the size as needed */
+}
+
+/* Container for the whole month */
+.month {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Grid for the days (7 columns for the 7 days of the week) */
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Styling the day names (Sun, Mon, etc.) */
+.day-name {
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+  color: #2c3e50;
+  text-transform: uppercase;
+  padding: 5px 0;
+  background-color: #ecf0f1;
+  border-radius: 5px;
+}
+
+/* Styling each day's container */
+.dayContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  height: 136px;
+  border-radius: 8px;
+  background-color: #16a085;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.dayContainer:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling the day (just a number) */
+.day {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #34495e;
+  margin-bottom: 8px;
+}
+
+/* Styling the task amount text below each day */
+.tasksAmount {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 30px;
+  color: black;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Optional: Add some padding to the month title */
+.Datedisplay {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
