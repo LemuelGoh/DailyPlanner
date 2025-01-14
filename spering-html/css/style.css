@@ -1070,7 +1070,7 @@ a:focus {
 .sidebar-item {
   background-color: #ecf0f1;
   margin: 20px 0;
-  padding: 200px;
+  height: 500px;  
   text-align: center;
 }
 
@@ -1192,6 +1192,13 @@ a:focus {
 
 .option-button:hover {
   background-color: #1abc9c;
+}
+
+.lock-icon {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100%; /* Ensure it takes the full height of the container */
 }
 
 .premium-lock {
