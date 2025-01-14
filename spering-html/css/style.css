@@ -1054,3 +1054,146 @@ a:focus {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.main-container {
+  display: flex;
+  width: 100%;
+}
+
+.sidebar {
+  width: 20%;
+  background-color: #2c3e50;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.sidebar-item {
+  background-color: #ecf0f1;
+  margin: 20px 0;
+  padding: 200px;
+  text-align: center;
+}
+
+
+.calendar-section {
+  width: 80%;
+  background-color: #34495e;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-buttons {
+  display: flex;
+}
+
+.nav-buttons button {
+  margin: 5px;
+  padding: 10px;
+  background-color: #16a085;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-controls button {
+  margin: 0 10px;
+  padding: 5px 10px;
+  background-color: #16a085;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.calendar-cell {
+  background-color: white;
+  color: black;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #bdc3c7;
+}
+
+.search-container {
+  position: relative;
+  width: 500px;
+  display: flex;
+  padding-top: 8px;
+}
+
+.search-buttons button {
+  margin: 5px;
+  padding: 10px;
+  background-color: #16a085;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+}
+
+.big-container {
+  position: relative;
+  width: 500px;
+  display: flex;
+}
+
+.top-options {
+  background-color: #2c3e50;
+  padding: 10px 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid #bdc3c7;
+}
+
+.top-options-content {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  padding-right: 20px;
+}
+
+.option-button {
+  background-color: #34495e;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.option-button .icon {
+  font-size: 16px;
+}
+
+.option-button:hover {
+  background-color: #1abc9c;
+}
+
+.premium-lock {
+  font-size: 5rem; /* You can adjust the size as needed */
+}
