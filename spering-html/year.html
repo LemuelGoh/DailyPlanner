@@ -32,7 +32,7 @@
     <header class="header_section">
       <div class="container-fluid">
         <nav class="navbar navbar-expand-lg custom_nav-container">
-          <a class="navbar-brand" href="index.html">
+          <a class="navbar-brand" href="user.html">
             <img src="images/logo.png" alt="" />
             <span>
               PlanLah
@@ -112,10 +112,10 @@
     <section class="calendar-section-year">
         <div class="calendar-header">
             <div class="nav-buttons">
-                <button>Day</button>
-                <button>Week</button>
+                <button onclick="redirectToDailyPage()">Day</button>
+                <button onclick="redirectToWeeklyPage()">Week</button>
                 <button onclick="redirectToUserPage()">Month</button>
-                <button>Year</button>
+                <button onclick="redirectToYearlyPage()">Year</button>
                 <div class="calendar-controls">
                     <button id="prevYear" onclick="changeYear(-1)">&larr;</button>
                     <span id="yearDisplay"></span>
@@ -291,6 +291,8 @@
   <script src="js/bootstrap.js"></script>
   <script src="js/yearlycalendar.js"></script>
   <script src="js/custom.js"></script>
+  <script src="js/directpage.js"></script>
+
 
 
 </body>

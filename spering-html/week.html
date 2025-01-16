@@ -22,6 +22,8 @@
   <link href="css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
+  <link href="css/daily.css" rel="stylesheet" />
+
 </head>
 
 <body class="sub_page">
@@ -124,9 +126,9 @@
                 <button onclick="redirectToUserPage()">Month</button>
                 <button onclick="redirectToYearlyPage()">Year</button>
                 <div class="calendar-controls">
-                    <button id="prevMonth">&larr;</button>
-                    <span id="monthDisplay"></span>
-                    <button id="nextMonth">&rarr;</button>
+                    <button id="prevWeek">&larr;</button>
+                    <span id="weekDisplay"></span>
+                    <button id="nextWeek">&rarr;</button>
                 </div>
             </div>
 
@@ -145,7 +147,7 @@
                   <button>Show Only Calendar</button>
               </div>
         </div>
-        <div class="calendar-grid">
+        <div class="calendar-grid-week">
             <!-- Calendar days and cells go here -->
             <div class="calendar-cell">Sunday</div>
             <div class="calendar-cell">Monday</div>
@@ -156,9 +158,9 @@
             <div class="calendar-cell">Saturday</div>
             <!-- Add more cells for dates -->
         </div>
-        <div id="monthlyCalendarContainer"></div>
-        <div id="monthDisplay"></div>
-
+        <div id="dailyCalendarContainer">
+            <div id="timeline"></div>
+        </div>
     </section>
     </div>
   <!-- end nav section -->
@@ -305,7 +307,7 @@
 
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
-  <script src="js/monthlycalendar.js"></script>
+  <script src="js/weeklycalendar.js"></script>
   <script src="js/custom.js"></script>
   <script src="js/directpage.js"></script>
 

@@ -120,10 +120,3 @@ document.getElementById("nextMonth").addEventListener("click", () => {
     changeMonth(1);
 });
 
-function redirectToUserPage() {
-    window.location.href = "user.html"; // Redirects to user.html
-}
-
-function redirectToYearlyPage() {
-    window.location.href = "year.html"; // Redirects to year.html
-}

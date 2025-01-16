@@ -96,6 +96,3 @@ function addDaysEventListener(){
     }
 }
 
-function redirectToUserPage() {
-    window.location.href = "user.html"; // Redirects to user.html
-}
