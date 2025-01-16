@@ -7,9 +7,17 @@ function redirectToYearlyPage() {
 }
 
 function redirectToDailyPage() {
-    window.location.href = "day.html"; // Redirects to year.html
+    window.location.href = "day.html"; // Redirects to day.html
 }
 
 function redirectToWeeklyPage() {
-    window.location.href = "week.html"; // Redirects to year.html
+    window.location.href = "week.html"; // Redirects to week.html
+}
+
+function clearInput(inputId) {
+    const inputElement = document.getElementById(inputId);
+    if (inputElement) {
+        inputElement.value = ""; // Clear the input field
+        inputElement.focus(); // Set focus back to the input field (optional)
+    }
 }
