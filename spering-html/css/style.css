@@ -34,6 +34,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  justify-content: center;
 }
 
 .heading_container h2 {
@@ -881,6 +882,7 @@ a:focus {
   padding: 50px;
   background-color: #1a2e35;
   color: #000; /* Black font color for the entire section */
+  justify-content: center;
 }
 
 .pricing-section h2 {
@@ -1068,7 +1070,7 @@ a:focus {
 }
 
 .sidebar-item {
-  background-color: #ecf0f1;
+  background-color: lightsteelblue;
   margin: 20px 0;
   height: 500px;  
   text-align: center;
@@ -1125,12 +1127,30 @@ a:focus {
   margin-top: 20px;
 }
 
+.calendar-grid-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+  margin-left: 150px;
+}
+
 .calendar-cell {
-  background-color: white;
-  color: black;
-  padding: 10px;
+  background-color: #ffffff; /* Clean white background */
+  color: #34495e; /* Dark grey text for better readability */
+  padding: 9px;
   text-align: center;
   border: 1px solid #bdc3c7;
+  border-radius: 8px; /* Rounded corners for a softer look */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  font-family: 'Poppins', sans-serif; /* Modern, rounded font */
+  font-size: 1.1rem; /* Slightly larger font for better legibility */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.calendar-cell:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .search-container {
@@ -1184,14 +1204,44 @@ a:focus {
   display: flex;
   align-items: center;
   gap: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.option-button-left {
+  background-color: #34495e;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .option-button .icon {
   font-size: 16px;
 }
 
+.option-button-left .icon {
+  font-size: 16px;
+}
+
 .option-button:hover {
   background-color: #1abc9c;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.option-button-left:hover {
+  background-color: #1abc9c;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .lock-icon {
@@ -1203,4 +1253,310 @@ a:focus {
 
 .premium-lock {
   font-size: 5rem; /* You can adjust the size as needed */
+}
+
+/* Container for the whole month */
+.month {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Grid for the days (7 columns for the 7 days of the week) */
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Styling the day names (Sun, Mon, etc.) */
+.day-name {
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+  color: #2c3e50;
+  text-transform: uppercase;
+  padding: 5px 0;
+  background-color: #ecf0f1;
+  border-radius: 5px;
+}
+
+/* Styling each day's container */
+.dayContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  height: 136px;
+  border-radius: 8px;
+  background-color: #16a085;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.dayContainer:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling the day (just a number) */
+.day {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #34495e;
+  margin-bottom: 8px;
+}
+
+/* Styling the task amount text below each day */
+.tasksAmount {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 30px;
+  color: black;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Optional: Add some padding to the month title */
+.Datedisplay {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+
+.calendar-section-year {
+  width: 100%;
+  background-color: #34495e;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.profile-widget {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.hide {
+  display: none;
+}
+
+.profile-header{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.setting-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:350px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.subscription-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.setting-button {
+  background-color: #34495e;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin: 5px;
+  width: 300px;
+  text-align: center;
+  justify-content: center;
+}
+
+.setting-button:hover {
+  background-color: #1abc9c;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.setting-container{
+  margin-bottom: 50px;
+  justify-content: center;
+}
+
+.close-button {
+  background-color: #34495e;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin: 5px;
+  text-align: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background-color: #1abc9c;
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.notification-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:430px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.backuprestore-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:430px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.contactsupport-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:430px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.feedback-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:430px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* Styling for the switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  margin-left: 10px;  /* Space between button and switch */
+  margin-top: 15px;
+}
+
+.switch input {
+  opacity: 0; /* Hide the checkbox */
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 50px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+/* When the checkbox is checked */
+input:checked + .slider {
+  background-color: #4CAF50;  /* Green color when checked */
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);  /* Move the slider to the right */
+}
+
+.setting-option{
+  display: flex;
+}
+
+#backup{
+  width: 378px;
+}
+
+.feedback-input{
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 5px;
+  height: 200px;
+  margin-bottom: 20px;
 }
