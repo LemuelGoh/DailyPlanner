@@ -91,7 +91,7 @@ function addDaysEventListener(){
             console.log(daysDiv[i].textContent);
             sessionStorage.setItem("storageRedirectDate",
                 `${monthOfTheDay.textContent} ${daysDiv[i].textContent}, ${currentYear}`);
-            window.location.href = "user.html"
+            window.location.href = "day.html"
         })
     }
 }
