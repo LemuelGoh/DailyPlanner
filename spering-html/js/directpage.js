@@ -37,6 +37,10 @@ document.getElementById("subscribe-btn").addEventListener("click", function() {
     notificationWidget.classList.add("hide");
     const backupWidget = document.getElementById("backuprestore-widget");
     backupWidget.classList.add("hide");
+    const contactWidget = document.getElementById("contactsupport-widget");
+    contactWidget.classList.add("hide");
+    const feedbackWidget = document.getElementById("feedback-widget");
+    feedbackWidget.classList.add("hide");
 
     const subscriptionWidget = document.getElementById("subscription-widget");
     // Toggle the visibility of the profile widget
@@ -61,6 +65,10 @@ document.getElementById("profile-btn").addEventListener("click", function() {
     notificationWidget.classList.add("hide");
     const backupWidget = document.getElementById("backuprestore-widget");
     backupWidget.classList.add("hide");
+    const contactWidget = document.getElementById("contactsupport-widget");
+    contactWidget.classList.add("hide");
+    const feedbackWidget = document.getElementById("feedback-widget");
+    feedbackWidget.classList.add("hide");
 
     const profileWidget = document.getElementById("profile-widget");
     // Toggle the visibility of the profile widget
@@ -108,6 +116,11 @@ document.getElementById("settings-btn").addEventListener("click", function() {
     notificationWidget.classList.add("hide");
     const backupWidget = document.getElementById("backuprestore-widget");
     backupWidget.classList.add("hide");
+    const contactWidget = document.getElementById("contactsupport-widget");
+    contactWidget.classList.add("hide");
+    const feedbackWidget = document.getElementById("feedback-widget");
+    feedbackWidget.classList.add("hide");
+    
 
     const settingWidget = document.getElementById("setting-widget");
     // Toggle the visibility of the profile widget
@@ -169,8 +182,6 @@ document.getElementById("backup-restore").addEventListener("click", function() {
     const backupWidget = document.getElementById("backuprestore-widget");
     // Toggle the visibility of the profile widget
     backupWidget.classList.toggle("hide");
-    
-    // Fetch data if needed
     fetchBackupData();
 });
 
@@ -199,22 +210,65 @@ function fetchBackupData() {
 }
 
 // CONTACT SUPPORT BUTTON -------------------------------------------------------------------------
-// document.getElementById("contact-suppport").addEventListener("click", function() {
-//     const contactWidget = document.getElementById("contactsupport-widget");
-//     // Toggle the visibility of the profile widget
-//     contactWidget.classList.toggle("hide");
+document.getElementById("contact-support").addEventListener("click", function() {
+    const contactWidget = document.getElementById("contactsupport-widget");
+    // Toggle the visibility of the profile widget
+    contactWidget.classList.toggle("hide");
+    fetchContactData();
+});
+
+function fetchContactData() {
+    const contactWidget = document.getElementById("contactsupport-widget");
     
-//     // Fetch data if needed
-//     // fetchNotificationData();
-// });
+    contactWidget.innerHTML = `
+        <p>Contact Us</p>
+        <div class="setting-container">
+            <div class="setting-option">
+                <a href="mailto:planlah.official.my@gmail.com?subject=Hello! PlanLah&body=I am interested to your service.">
+                    <button class="setting-button" id="backup">planlah.official.my@gmail.com</button>
+                </a>
+            </div>
+            <div class="setting-option">
+                <button class="setting-button" id="backup">+60-1234567890</button>
+            </div>
+        </div>
+        <div class="profile-header">
+            <button class="close-button" id="close-contactsupport-widget" class="close-btn">✖ Close</button>
+        </div>
+    `;
+
+    document.getElementById("close-contactsupport-widget").addEventListener("click", function() {
+        const contactWidget = document.getElementById("contactsupport-widget");
+        contactWidget.classList.add("hide");
+    });
+}
 
 // FEEDBACK SUBMISSION BUTTON -------------------------------------------------------------------------
-// document.getElementById("feedback-submission").addEventListener("click", function() {
-//     const feedbackWidget = document.getElementById("feedback-widget");
-//     // Toggle the visibility of the profile widget
-//     feedbackWidget.classList.toggle("hide");
+document.getElementById("feedback-submission").addEventListener("click", function() {
+    const feedbackWidget = document.getElementById("feedback-widget");
+    // Toggle the visibility of the profile widget
+    feedbackWidget.classList.toggle("hide");
     
-//     // Fetch data if needed
-//     // fetchNotificationData();
-// });
+    fetchFeedbackData();
+});
 
+function fetchFeedbackData() {
+    const feedbackWidget = document.getElementById("feedback-widget");
+    
+    feedbackWidget.innerHTML = `
+    <p>Feedback:</p>
+    <div class="setting-container">
+        <div class="setting-option">
+            <textarea id="feedback-input" class="feedback-input" placeholder="Enter your feedback here..."></textarea>
+        </div>
+    <div class="profile-header">
+        <button class="close-button" id="close-feedback-widget" class="close-btn">✖ Close</button>
+        <button class="close-button" id="submit-feedback">Submit Feedback</button>
+    </div>
+    `;
+
+    document.getElementById("close-feedback-widget").addEventListener("click", function() {
+        const feedbackWidget = document.getElementById("feedback-widget");
+        feedbackWidget.classList.add("hide");
+    });
+}

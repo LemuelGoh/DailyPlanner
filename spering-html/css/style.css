@@ -1468,6 +1468,34 @@ a:focus {
   z-index: 1000;
 }
 
+.contactsupport-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:430px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.feedback-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:430px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
 /* Styling for the switch */
 .switch {
   position: relative;
@@ -1522,5 +1550,13 @@ input:checked + .slider:before {
 }
 
 #backup{
-  width: 500px;
+  width: 378px;
+}
+
+.feedback-input{
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 5px;
+  height: 200px;
+  margin-bottom: 20px;
 }
