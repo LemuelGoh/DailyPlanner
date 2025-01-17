@@ -36,14 +36,8 @@ const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Frida
 
 const tasksDate = [{month:-1,day:-1,year:-1,repeat:-1}];
 
-// Fetch data from firestore (simulated here)
-async function initTasksDate() {
-    // Simulate task data, replace with actual Firestore fetching
-    tasksDate.push({ month: 1, day: 15, year: 2025, repeat: "daily" });
-    tasksDate.push({ month: 2, day: 25, year: 2025, repeat: "monthly" });
-}
 
- function generateMonth(year, month) {
+function generateMonth(year, month) {
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -66,8 +60,6 @@ async function initTasksDate() {
 
     // Days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-        const filterDay = filterYrMnth.filter(t => (t.day === day) || t.repeat === "daily");
-
         const container = document.createElement("div");
         container.className = "dayContainer";
         const dayDiv = document.createElement("div");
@@ -75,7 +67,7 @@ async function initTasksDate() {
         dayDiv.textContent = day;
         const tasksAmountDiv = document.createElement("div");
         tasksAmountDiv.className = "tasksAmount";
-        tasksAmountDiv.textContent = `${filterDay.length} tasks`;
+        tasksAmountDiv.textContent = "task";
 
         container.appendChild(dayDiv);
         container.appendChild(tasksAmountDiv);
@@ -87,10 +79,11 @@ async function initTasksDate() {
 }
 
 function generateMonthCalendar(year, month) {
-    monthlyCalendarContainer.innerHTML = "";
+    monthlyCalendarContainer.innerHTML = ""; // Clear old monthly calendar
     const monthCalendar = generateMonth(year, month);
     monthlyCalendarContainer.appendChild(monthCalendar);
     monthDisplay.textContent = `${monthNames[month]}, ${year}`;
+    addDaysEventListener();
 }
 
 function changeMonth(offset) {
@@ -105,12 +98,12 @@ function changeMonth(offset) {
         currentYear--;
     }
     generateMonthCalendar(currentYear, currentMonth);
+    addDaysEventListener();
 }
 
-// Initialize the calendar
-initTasksDate().then(() => {
-    generateMonthCalendar(currentYear, currentMonth);
-});
+
+generateMonthCalendar(currentYear, currentMonth);
+addDaysEventListener();
 
 document.getElementById("prevMonth").addEventListener("click", () => {
     changeMonth(-1);
@@ -120,3 +113,18 @@ document.getElementById("nextMonth").addEventListener("click", () => {
     changeMonth(1);
 });
 
+
+function addDaysEventListener() {
+    const dayContainers = document.getElementsByClassName("dayContainer");
+    for (let i = 0; i < dayContainers.length; i++) {
+        const dayContainer = dayContainers[i];
+        dayContainer.addEventListener("click", () => {
+            const dayDiv = dayContainer.querySelector(".day");
+            const dayText = dayDiv.textContent;
+            const month = monthNames[currentMonth];
+            const redirectDate = `${month} ${dayText}, ${currentYear}`;
+            sessionStorage.setItem("storageRedirectDate", redirectDate);
+            window.location.href = "day.html";
+        });
+    }
+}
