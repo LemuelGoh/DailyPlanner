@@ -168,3 +168,51 @@ document.getElementById('otp-submit-btn').addEventListener('click', function (e)
     // Call the verifyOTP function with the correct arguments
     verifyOTP(email, inputOTP);
 });
+
+document.getElementById("login-submit-btn").addEventListener('click', login);
+    
+
+
+function login(e) {
+    e.preventDefault();
+
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+    console.log('Email:', email);
+    console.log('Password:', password);
+
+
+    // Query Firestore for the user by email
+    db.collection("users").where("email", "==", email).get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                // Get the first document from the query result
+                const doc = querySnapshot.docs[0];
+                const userData = doc.data();
+                const storedPassword = userData.password; // Assuming password is stored in plaintext (NOTE: should hash passwords in real apps)
+                console.log(storedPassword)
+
+                // Manually check if the entered password matches the stored password
+                if (password === storedPassword) {
+                    // Store user data in localStorage
+                    localStorage.setItem('userEmail', userData.email);
+                    localStorage.setItem('isLoggedIn', 'true');
+                    alert("Log In Successful!")
+
+                    console.log("Login successful!");
+                    // Redirect to the desired page after login
+                    window.location.href = 'user.html';
+                } else {
+                    console.log("Invalid password.");
+                    alert("Invalid email or password.");
+                }
+            } else {
+                console.log("No user document found!");
+                alert("No user found with this email.");
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching user data: ", error);
+            alert("Error fetching user data.");
+        });
+}
