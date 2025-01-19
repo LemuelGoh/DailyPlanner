@@ -1,18 +1,18 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
-
 const firebaseConfig = {
-apiKey: "AIzaSyCbQM3aHC_WuHOHhnXQX6o24gm1wMK1oG0",
-authDomain: "planlah-567bc.firebaseapp.com",
-projectId: "planlah-567bc",
-storageBucket: "planlah-567bc.firebasestorage.app",
-messagingSenderId: "28284816915",
-appId: "1:28284816915:web:dbf814a6deda4e899f39e6",
-measurementId: "G-GFT6LV5GZT",
+    apiKey: "AIzaSyDvQKch6kMq9J8KffpuiogfDoaOUAk8aWo",
+    authDomain: "planlah-16aef.firebaseapp.com",
+    projectId: "planlah-16aef",
+    storageBucket: "planlah-16aef.firebasestorage.app",
+    messagingSenderId: "638721515088",
+    appId: "1:638721515088:web:9f4208ac42875abcacfb55"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// INITIALIZE DATABASE
+firebase.initializeApp(firebaseConfig);
+
+
+// Reference Firestore Database
+var db = firebase.firestore(firebase);
 
 
 document.getElementById("login-form").addEventListener("submit", async (e) => {
@@ -28,6 +28,8 @@ const querySnapshot = await getDocs(q);
 
 if (!querySnapshot.empty) {
   alert("Login successful!");
+  localStorage.setItem('loggedInUser', email);
+  localStorage.setItem('loginStatus', 'loggedIn');
   window.location.href = "user.html"; 
 } else {
   alert("Invalid email or password.");
