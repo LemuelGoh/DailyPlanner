@@ -99,7 +99,7 @@ const generateOTP = () => {
 // Function to save login info in Firestore
 const saveLoginInfo = (email, password) => {
     const otp = generateOTP(); // Generate the OTP
-    const expirationTime = firebase.firestore.Timestamp.fromMillis(Date.now() + 5 * 60 * 1000);
+    const expirationTime = firebase.firestore.Timestamp.fromMillis(Date.now() + 10 * 60 * 1000);
     console.log(otp)
 
     db.collection("users").add({
@@ -108,7 +108,8 @@ const saveLoginInfo = (email, password) => {
         otp: otp, // Store the generated OTP
         otpGeneratedAt: firebase.firestore.FieldValue.serverTimestamp(), // Store the timestamp when OTP is generated
         otpExpirationTime: expirationTime,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        status: "Not Activated"
     })
     .then(() => {
         alert("Register Successful!");
@@ -119,6 +120,7 @@ const saveLoginInfo = (email, password) => {
 }
 
 
+//VERIFY OTP
 const verifyOTP = (email, inputOTP) => {
     // Step 1: Query the Firestore collection to find the document with the matching email
     db.collection("users").where("email", "==", email).get()
@@ -136,6 +138,9 @@ const verifyOTP = (email, inputOTP) => {
                     const currentTimestamp = new Date().getTime(); // Use local timestamp
                     if (currentTimestamp < otpExpirationTime.toMillis()) {
                         console.log("OTP is valid.");
+                        db.collection("users").doc(userId).update({
+                            status: "Activated"
+                        })
                         localStorage.setItem('loggedInUser', email);
                         localStorage.setItem('loginStatus', 'loggedIn');
                         window.location.href = 'user.html';
@@ -158,7 +163,7 @@ const verifyOTP = (email, inputOTP) => {
 };
 
 
-// Assuming you have a form or button triggering the OTP verification
+//GET OTP
 document.getElementById('otp-submit-btn').addEventListener('click', function (e) {
     e.preventDefault();
     
@@ -169,18 +174,18 @@ document.getElementById('otp-submit-btn').addEventListener('click', function (e)
     verifyOTP(email, inputOTP);
 });
 
+
+// LOGIN
 document.getElementById("login-submit-btn").addEventListener('click', login);
-    
-
-
 function login(e) {
     e.preventDefault();
 
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    console.log('Email:', email);
-    console.log('Password:', password);
-
+    if (!email || !password) {
+        alert("Please enter both email and password.");
+        return; // Stop further execution if fields are empty
+    }
 
     // Query Firestore for the user by email
     db.collection("users").where("email", "==", email).get()
@@ -216,3 +221,4 @@ function login(e) {
             alert("Error fetching user data.");
         });
 }
+// END LOGIN
