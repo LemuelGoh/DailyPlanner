@@ -92,6 +92,8 @@
           <div class="col-md-6 mx-auto">
             <div class="login_box">
               
+
+              <!-- LOGIN FORM -->
               <form id="login-form">
                 <div class="heading_container login_heading">
                   <h2>Login to Your Account</h2>
@@ -111,10 +113,13 @@
                   </div>
                 </div>
                 <button type="button" class="btn btn-primary btn-register">No Account? Register Now</button>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="button" class="btn btn-primary">Login</button>
                 <button type="button" class="btn btn-primary btn-forget-password">Forget Password?</button>
               </form>
+              <!-- END LOGIN FORM -->
 
+
+              <!-- REGISTER FORM -->
               <form id="register-form" class="hidden">
                 <div class="heading_container login_heading">
                   <h2>Sign Up</h2>
@@ -144,9 +149,31 @@
                 </div>
 
                 <button type="button" class="btn btn-primary btn-login">Already have an account? Login Now</button>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary" id="register-submit-btn">Register</button>
               </form>
-              
+              <!-- END REGISTER FORM -->
+
+
+              <!-- OTP Verification Form -->
+              <form id="otp-verification-form" class="hidden">
+                <div class="heading_container login_heading">
+                  <h2>Verify OTP</h2>
+                </div>
+                <div class="form-group">
+                  <label for="otp-input">Enter OTP:</label>
+                  <div class="input-container">
+                    <input type="text" class="form-control" id="otp-input" placeholder="Enter the OTP sent to your email" required maxlength="6">
+                    <span class="clear-input" onclick="clearInput('otp-input')">&times;</span>
+                  </div>
+                </div>
+
+                <button type="button" class="btn btn-primary">Resend OTP</button>
+                <button type="button" class="btn btn-primary" id="otp-submit-btn">Verify OTP</button>
+              </form>
+              <!-- END OTP Verification Form -->
+
+
+              <!-- FORGET PASSWORD FORM -->
               <form id="forget-password-form" class="hidden">
                 <div class="heading_container login_heading">
                   <h2>Forget Password</h2>
@@ -169,7 +196,10 @@
                 <button type="button" class="btn btn-primary btn-login">Back to Login</button>
                 <button type="submit" class="btn btn-primary btn-password-recovery">Reset Password</button>
               </form>
+              <!-- END FORGET PASSWORD FORM -->
 
+              
+              <!-- PASSWORD RECOVERY FORM -->
               <form id="password-recovery-form" class="hidden">
                 <div class="heading_container login_heading">
                   <h2>Password Recovery</h2>
@@ -189,7 +219,9 @@
                     <span class="clear-input" onclick="clearInput('re-new-password')">&times;</span>
                   </div>
                 </div>
-
+                <!-- END PASSWORD RECOVERY FORM -->
+                
+                
                 <button type="button" class="btn btn-primary btn-login">Cancel</button>
                 <button type="button" class="btn btn-primary">Reset Password</button>
               </form>
@@ -346,6 +378,10 @@
   <script src="js/bootstrap.js"></script>
   <script src="js/custom.js"></script>
   <script src="js/login.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+  <script type="module" src="js/signup.js"></script>
+  <!-- <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script> -->
 
 </body>
 
