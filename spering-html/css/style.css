@@ -1560,3 +1560,14 @@ input:checked + .slider:before {
   height: 200px;
   margin-bottom: 20px;
 }
+
+.admin-section{
+  display: flex;
+}
+
+.left-container {
+  width: 30%;
+}
+.right-container {
+  width: 70%;
+}
