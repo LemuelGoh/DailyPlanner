@@ -35,9 +35,23 @@ function showOTPVerificationForm() {
     document.getElementById('password-recovery-form').classList.add('hidden');
     document.getElementById('otp-verification-form').classList.remove('hidden');
 }
+// END Show OTP form
 
 
-// Function to handle form submission
+// SendMail()
+// function sendMail(email, otp){
+//     var params = {
+//         to_name : (email),
+//         OTP : (otp)
+//     }
+//     emailjs.send("service_es85yey", "template_g35cvdm", params).then(function(res){
+//         alert("OTP is succesful delivery!")
+//     })
+// }
+// END SendMail()
+
+
+// Function to handle form submission of the register
 function submitForm(e) {
     e.preventDefault();
     var email = getElementVal('register-email'); // Using helper function correctly
@@ -82,6 +96,7 @@ const checkIfEmailExists = (email) => {
             return false; // Return false in case of error
         });
 }
+// Function to check if the email already exists in Firestore
 
 
 // Function to generate a random OTP
@@ -94,6 +109,7 @@ const generateOTP = () => {
     }
     return otp;
 };
+// Function to generate a random OTP
 
 
 // Function to save login info in Firestore
@@ -112,12 +128,14 @@ const saveLoginInfo = (email, password) => {
         status: "Not Activated"
     })
     .then(() => {
+        // sendMail(email,otp);
         alert("Register Successful!");
     })
     .catch((error) => {
         alert("Error!", error);
     });
 }
+// Function to save login info in Firestore
 
 
 //VERIFY OTP
@@ -161,6 +179,7 @@ const verifyOTP = (email, inputOTP) => {
             console.error("Error verifying OTP: ", error);
         });
 };
+//VERIFY OTP
 
 
 //GET OTP
@@ -173,6 +192,7 @@ document.getElementById('otp-submit-btn').addEventListener('click', function (e)
     // Call the verifyOTP function with the correct arguments
     verifyOTP(email, inputOTP);
 });
+//GET OTP
 
 
 // LOGIN
