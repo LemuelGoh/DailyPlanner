@@ -373,6 +373,7 @@ function fetchBackupData() {
         backupWidget.classList.add("hide");
     });
 }
+// BACKUP BUTTON -------------------------------------------------------------------------
 
 
 // CONTACT SUPPORT BUTTON -------------------------------------------------------------------------
@@ -408,6 +409,7 @@ function fetchContactData() {
         contactWidget.classList.add("hide");
     });
 }
+// CONTACT SUPPORT BUTTON -------------------------------------------------------------------------
 
 
 // FEEDBACK SUBMISSION BUTTON -------------------------------------------------------------------------
@@ -446,3 +448,96 @@ document.getElementById("logout-btn").addEventListener('click', function() {
     alert("Logged Out Successful")
     window.location.href = 'index.html';
 });
+// FEEDBACK SUBMISSION BUTTON -------------------------------------------------------------------------
+
+// ADD TASKS BUTTON ----------------------------------------------------------------------------------------
+document.getElementById("add-tasks-btn").addEventListener("click", function() {
+    const addtaskWidget = document.getElementById("addtask-widget");
+    // Toggle the visibility of the profile widget
+    addtaskWidget.classList.toggle("hide");
+    addtask();
+});
+
+function addtask() {
+    const addtaskWidget = document.getElementById("addtask-widget");
+    
+    addtaskWidget.innerHTML = `
+    <div class="task-widget">
+        <p>Add Task:</p>
+        <div class="addtask-container">
+            <div class="left-container" style="width: 60%; padding-right: 20px;">
+                <div class="setting-option">
+                    <label for="task-title">Title:</label>
+                    <input type="text" id="task-title" class="task-input" placeholder="Enter task title" />
+                </div>
+                <div class="setting-option">
+                    <label for="task-time">Time:</label>
+                    <input type="time" id="task-time" class="task-input" step="3600" />
+                </div>
+                <div class="setting-option">
+                    <label for="task-category">Category:</label>
+                    <input type="text" id="task-category" class="task-input" placeholder="Enter task category" />
+                </div>
+                <div class="setting-option">
+                    <label for="task-description">Description:</label>
+                    <textarea id="task-description" class="task-input" placeholder="Enter task description"></textarea>
+                </div>
+                <div class="setting-option">
+                    <label for="task-date">Date:</label>
+                    <input type="date" id="task-date" class="task-input" />
+                </div>
+            </div>
+            <div class="right-container2" style="width: 40%;">
+                <div class="setting-option3">
+                    <label for="task-reminder">Reminder:</label>
+                    <select id="task-reminder" class="task-input">
+                        <option value="0">None</option>
+                        <option value="15">15 mins</option>
+                        <option value="30">30 mins</option>
+                        <option value="45">45 mins</option>
+                        <option value="60">60 mins</option>
+                    </select>
+                </div>
+                <div class="setting-option3">
+                    <label for="task-priority">Priority:</label>
+                    <select id="task-priority" class="task-input">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="setting-option3">
+                    <label for="task-recurring">Task Recurring:</label>
+                    <select id="task-recurring" class="task-input">
+                        <option value="0">None</option>
+                        <option value="1">Day</option>
+                        <option value="7">Week</option>
+                        <option value="30">Month</option>
+                    </select>
+                </div>
+                <div class="setting-option3">
+                    <label for="mark-as-done">Mark as Done:</label>
+                    <input type="checkbox" id="mark-as-done" />
+                </div>
+                <div class="setting-option2">
+                    <button id="close-addtask-widget" class="close-button" >Cancel</button>
+                    <button id="save-button" class="close-button">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    document.getElementById("close-addtask-widget").addEventListener("click", function() {
+        const addtaskWidget = document.getElementById("addtask-widget");
+        addtaskWidget.classList.add("hide");
+    });
+}
+
+document.getElementById("logout-btn").addEventListener('click', function() {
+    localStorage.clear();
+    console.log("User logged out successfully!");
+    alert("Logged Out Successful")
+    window.location.href = 'index.html';
+});
+// ADD TASKS BUTTON ----------------------------------------------------------------------------------------

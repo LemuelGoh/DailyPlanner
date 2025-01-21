@@ -1496,6 +1496,21 @@ a:focus {
   z-index: 1000;
 }
 
+.addtask-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:1400px;
+  height: 700px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
 /* Styling for the switch */
 .switch {
   position: relative;
@@ -1568,8 +1583,13 @@ input:checked + .slider:before {
 .left-container {
   width: 30%;
 }
+
 .right-container {
   width: 70%;
+}
+
+.right-container {
+  justify-content: space-between;
 }
 
 #username-input {
@@ -1584,4 +1604,72 @@ input:checked + .slider:before {
 #username-input:focus {
   border-color: #4CAF50;    /* Green border color when focused */
   outline: none;            /* Remove the default outline */
+}
+
+.addtask-container{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.left-container, .right-container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.task-input {
+  width: 100%;
+  padding: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: 50px; /* Ensures consistent height for input fields */
+}
+
+.task-textarea {
+  height: 120px; /* Higher height for the description field */
+}
+
+.setting-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.setting-option2 {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 150px;
+}
+
+.setting-option3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-description{
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+
+#task-description {
+  height: 150px;
+}
+
+#mark-as-done {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
 }
