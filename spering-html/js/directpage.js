@@ -341,6 +341,7 @@ function updateUserSetting(email, settingType, value) {
 }
 // ----------------------------------------------------------------------------------------------
 
+
 // BACKUP BUTTON -------------------------------------------------------------------------
 document.getElementById("backup-restore").addEventListener("click", function() {
     const backupWidget = document.getElementById("backuprestore-widget");
@@ -372,6 +373,7 @@ function fetchBackupData() {
         backupWidget.classList.add("hide");
     });
 }
+
 
 // CONTACT SUPPORT BUTTON -------------------------------------------------------------------------
 document.getElementById("contact-support").addEventListener("click", function() {
@@ -406,6 +408,7 @@ function fetchContactData() {
         contactWidget.classList.add("hide");
     });
 }
+
 
 // FEEDBACK SUBMISSION BUTTON -------------------------------------------------------------------------
 document.getElementById("feedback-submission").addEventListener("click", function() {
