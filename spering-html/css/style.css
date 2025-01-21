@@ -1571,3 +1571,17 @@ input:checked + .slider:before {
 .right-container {
   width: 70%;
 }
+
+#username-input {
+  border: 2px solid #ccc;  /* Light gray border */
+  padding: 5px 10px;        /* Add some padding for a better look */
+  border-radius: 4px;       /* Optional: round the corners of the input */
+  font-size: 14px;          /* Optional: adjust font size */
+  width: 100%;              /* Ensure input takes the full width of the container */
+  box-sizing: border-box;   /* Ensure padding is included in the width */
+}
+
+#username-input:focus {
+  border-color: #4CAF50;    /* Green border color when focused */
+  outline: none;            /* Remove the default outline */
+}

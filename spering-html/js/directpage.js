@@ -16,6 +16,12 @@ firebase.initializeApp(firebaseConfig);
 // Reference Firestore Database
 var db = firebase.firestore(firebase);
 
+
+// Helper function to get element value
+const getElementVal = (id) => {
+    return document.getElementById(id).value;
+}
+
 var email = localStorage.getItem("loggedInUser");
 
 function redirectToUserPage() {
@@ -100,27 +106,99 @@ document.getElementById("profile-btn").addEventListener("click", function() {
 
 function fetchProfileData() {
     const profileWidget = document.getElementById("profile-widget");
+    var email = localStorage.getItem("loggedInUser");
+    console.log(email);
     
-    // Set the profile widget content including the close and edit buttons
-    profileWidget.innerHTML = `
-    <p>Profile Information</p>
-    <p>Name: John Doe</p>
-    <p>Email: john@example.com</p>
-    <div class="profile-header">
-        <button class="close-button" id="close-profile-widget" class="close-btn">✖</button>
-        <button class="close-button" id="edit-profile" class="edit-btn">✏️ Edit</button>
-    </div>
-    `;
+    db.collection("profile").where("email", "==", email).get()
+    .then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+            const profile = querySnapshot.docs[0];
+            const profileData = profile.data();
+            const email = profileData.email;
+            const username = profileData.username;
+
+            // Set up the notification widget UI
+            profileWidget.innerHTML = `
+            <p>Profile Information</p>
+            <p>Name:</p>
+            <p>${username}</p>
+            <p>Email:</p>
+            <p> ${email}</p>
+            <div class="profile-header">
+                <button class="close-button" id="close-profile-widget" class="close-btn">✖</button>
+                <button class="close-button" id="edit-profile" class="edit-btn">✏️ Edit</button>
+            </div>
+            `;
+
+            // Add event listener to the close button
+            document.getElementById("close-profile-widget").addEventListener("click", function() {
+                profileWidget.classList.add("hide");
+            });
+
+            // Add event listener for the edit button (for now, this just logs a message)
+            document.getElementById("edit-profile").addEventListener("click", function() {
+                profileWidget.innerHTML = `
+                <p>Editing Profile Information</p>
+                <p>Name:</p>
+                <input type="text" id="username-input" value="${username}">
+                <p>Email:</p>
+                <p> ${email}</p>
+                <div class="profile-header">
+                    <button class="close-button" id="close-profile-widget" class="close-btn">✖</button>
+                    <button class="close-button" id="edit-profile" class="editdone-btn">✅ Done</button>
+                </div>
+                `;
+
+                document.getElementById("close-profile-widget").addEventListener("click", function() {
+                    profileWidget.classList.add("hide");
+                });
+
+                document.getElementById("edit-profile").addEventListener("click", function() {
+                    db.collection("profile").where("email", "==", email).get()
+                    .then((querySnapshot) => {
+                        if (!querySnapshot.empty){
+                            const profile = querySnapshot.docs[0];
+                            const userId = profile.id;
+                            const username = getElementVal('username-input');
     
-    // Add event listener for the close button to hide the profile widget
-    document.getElementById("close-profile-widget").addEventListener("click", function() {
-        const profileWidget = document.getElementById("profile-widget");
-        profileWidget.classList.add("hide");
-    });
-    
-    // Add event listener for the edit button (for now, this just logs a message)
-    document.getElementById("edit-profile").addEventListener("click", function() {
-        alert("Edit button clicked! (This can be expanded for real editing functionality.)");
+                            db.collection("profile").doc(userId).update({
+                                username: username
+                            }).then(() =>{
+                                console.log("Profile updated");
+                                fetchProfileData();
+                            })
+                            .catch((error) => {
+                                console.error("Error updating password: ", error);
+                                alert("Error updating password.");
+                            });
+                        } else {
+                            console.log("User not found.");
+                            alert("User not found.");
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error getting documents: ", error);
+                        alert("Error finding user. ");
+                    })
+                });
+            });
+
+        } else {
+            console.log("No user settings found.");
+            db.collection("profile").add({
+                email: email,
+                username: email,
+            }).then(() => {
+                console.log("Default Settings");
+                fetchProfileData();
+            })
+            .catch((error) => {
+                console.error("Error Adding Settings:", error);
+            });
+        }
+    })
+    .catch((error) => {
+        console.error("Error fetching settings: ", error);
     });
 }
 // -------------------------------------------------------------------------------
@@ -209,11 +287,11 @@ function fetchNotificationData(email) {
 
                 // Add event listeners to toggle switches
                 document.getElementById("email-notification").addEventListener("change", function() {
-                    updateUserSetting(email, 'emailNotifications', this.checked);
+                    updateUserSetting(email, 'emailNotification', this.checked);
                 });
 
                 document.getElementById("in-app-alert").addEventListener("change", function() {
-                    updateUserSetting(email, 'inAppAlerts', this.checked);
+                    updateUserSetting(email, 'inAppAlert', this.checked);
                 });
 
             } else {
@@ -358,3 +436,10 @@ function fetchFeedbackData() {
         feedbackWidget.classList.add("hide");
     });
 }
+
+document.getElementById("logout-btn").addEventListener('click', function() {
+    localStorage.clear();
+    console.log("User logged out successfully!");
+    alert("Logged Out Successful")
+    window.location.href = 'index.html';
+});
