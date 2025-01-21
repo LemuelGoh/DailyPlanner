@@ -244,8 +244,11 @@ function login(e) {
                 // Manually check if the entered password matches the stored password
                 if (password === storedPassword) {
                     // Store user data in localStorage
-                    localStorage.setItem('userEmail', userData.email);
+                    localStorage.setItem('loggedInUser', userData.email);
                     localStorage.setItem('isLoggedIn', 'true');
+                    var test = localStorage.getItem("loggedInUser");
+                    console.log(test);
+                    
                     alert("Log In Successful!")
 
                     console.log("Login successful!");
@@ -431,7 +434,7 @@ const updatePassword = (email, newPassword) => {
 // setting the new password button
 document.getElementById("set-newpassword-btn").addEventListener('click', function(e){
     e.preventDefault();
-    var email = localStorage.getItem("loggedInUser")
+    var email = localStorage.getItem("loggedInUser");
     var newPassword = getElementVal("new-password");
     var renewPassword = getElementVal("re-new-password")
 

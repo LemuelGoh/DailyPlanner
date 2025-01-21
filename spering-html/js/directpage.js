@@ -1,3 +1,23 @@
+const firebaseConfig = {
+    apiKey: "AIzaSyDvQKch6kMq9J8KffpuiogfDoaOUAk8aWo",
+    authDomain: "planlah-16aef.firebaseapp.com",
+    projectId: "planlah-16aef",
+    storageBucket: "planlah-16aef.firebasestorage.app",
+    messagingSenderId: "638721515088",
+    appId: "1:638721515088:web:9f4208ac42875abcacfb55"
+};
+
+
+
+// INITIALIZE DATABASE
+firebase.initializeApp(firebaseConfig);
+
+
+// Reference Firestore Database
+var db = firebase.firestore(firebase);
+
+var email = localStorage.getItem("loggedInUser");
+
 function redirectToUserPage() {
     window.location.href = "user.html"; // Redirects to user.html
 }
@@ -144,36 +164,102 @@ document.getElementById("notification-preferences").addEventListener("click", fu
     fetchNotificationData();
 });
 
-function fetchNotificationData() {
+function fetchNotificationData(email) {
     const notificationWidget = document.getElementById("notification-widget");
-    
-    notificationWidget.innerHTML = `
-        <p>Notification Preferences</p>
-        <div class="setting-container">
-            <div class="setting-option">
-                <button class="setting-button">Email Notification</button>
-                <label class="switch">
-                    <input type="checkbox" id="email-notification">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="setting-option">
-                <button class="setting-button">In-App Alert</button>
-                <label class="switch">
-                    <input type="checkbox" id="in-app-alert">
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </div>
-        <div class="profile-header">
-            <button class="close-button" id="close-notification-widget" class="close-btn">✖ Close</button>
-        </div>
-    `;
+    var email = localStorage.getItem("loggedInUser");
 
-    document.getElementById("close-notification-widget").addEventListener("click", function() {
-        const notificationWidget = document.getElementById("notification-widget");
-        notificationWidget.classList.add("hide");
-    });
+    // Fetch user settings from Firestore
+    db.collection("settings").where("email", "==", email).get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                console.log(email)
+                const settings = querySnapshot.docs[0];
+                const settingsData = settings.data();
+                const emailNotifications = settingsData.emailNotification;
+                const inAppAlerts = settingsData.inAppAlert;
+
+                // Set up the notification widget UI
+                notificationWidget.innerHTML = `
+                    <p>Notification Preferences</p>
+                    <div class="setting-container">
+                        <div class="setting-option">
+                            <button class="setting-button">Email Notification</button>
+                            <label class="switch">
+                                <input type="checkbox" id="email-notification" ${emailNotifications ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-option">
+                            <button class="setting-button">In-App Alert</button>
+                            <label class="switch">
+                                <input type="checkbox" id="in-app-alert" ${inAppAlerts ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="profile-header">
+                        <button class="close-button" id="close-notification-widget" class="close-btn">✖ Close</button>
+                    </div>
+                `;
+
+                // Add event listener to the close button
+                document.getElementById("close-notification-widget").addEventListener("click", function() {
+                    notificationWidget.classList.add("hide");
+                });
+
+                // Add event listeners to toggle switches
+                document.getElementById("email-notification").addEventListener("change", function() {
+                    updateUserSetting(email, 'emailNotifications', this.checked);
+                });
+
+                document.getElementById("in-app-alert").addEventListener("change", function() {
+                    updateUserSetting(email, 'inAppAlerts', this.checked);
+                });
+
+            } else {
+                console.log("No user settings found.");
+                db.collection("settings").add({
+                    email: email,
+                    emailNotification: false,
+                    inAppAlert: false,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                }).then(() => {
+                    console.log("Default Settings");
+                    fetchNotificationData();
+                })
+                .catch((error) => {
+                    console.error("Error Adding Settings:", error);
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching settings: ", error);
+        });
+}
+
+function updateUserSetting(email, settingType, value) {
+    // Update user settings in Firestore
+    db.collection("settings").where("email", "==", email).get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                const userDoc = querySnapshot.docs[0];
+                const userId = userDoc.id;
+
+                db.collection("settings").doc(userId).update({
+                    [settingType]: value,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+                .then(() => {
+                    console.log("User settings updated successfully!");
+                })
+                .catch((error) => {
+                    console.error("Error updating settings: ", error);
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching user data: ", error);
+        });
 }
 // ----------------------------------------------------------------------------------------------
 
