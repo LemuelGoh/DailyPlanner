@@ -8,10 +8,6 @@
   <!-- Mobile Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <!-- Site Metas -->
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-
   <title>PlanLah</title>
 
   <!-- bootstrap core css -->
@@ -22,6 +18,9 @@
   <link href="css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
+  <!-- admin css -->
+  <link href="css/admin.css" rel="stylesheet"/>
+
 
 </head>
 
@@ -41,7 +40,6 @@
       </div>
     </header>
     <!-- end header section -->
-  </div>
 
   <!------------------------------------------- Top Options Section ------------------------------------------------->
   <section class="top-options">
@@ -59,153 +57,47 @@
 
   <!-- nav section -->
   <div class="main-container">
-        <div class="left-container">
-            <div class="left-content">
+        <aside class="sidebar">
                 <!-- LEFT CONTECT START -->
-                 <P>TEST</P>
-            </div>
-        </div>
+                <h3>Online Users</h3>
+                <div id="user-list">
+                </div>
+        </aside>
+        <div class="content-container"></div>
+        <!-- Rigght CONTECT START -->
         <div class="right-container">
-            <div class="right-content">
-                <!-- RIGHT CONTENT START -->
-                <h2>test2</h2>
+          <div class="stats-container">
+            <div class="stats-box">
+              <h4>Online Users</h4>
+              <h2 id="online-users-count">0</h2>
+              <div id="user-list"></div>
+              
             </div>
+
+            <div class="stats-box">
+              <h4>Pending Matter</h4>
+              <div class="stat-value">3</div>
+              <button>Show</button>
+            </div>
+            <div class="stats-box">
+              <h4>User Feedback</h4>
+              <div class="stat-value">3</div>
+              <button>Details</button>
+            </div>
+          </div>
+          <div id="user-details" class="user-details-box"></div>
         </div>
-
-
+      </div>
+    </div>
+  </div>
+        
 
 
     </section>
     </div>
   <!-- end nav section -->
 
-  <!-- info section -->
-
-  <section class="info_section ">
-    <div class="info_container layout_padding-top">
-      <div class="container">
-        <div class="info_top">
-          <div class="info_logo">
-            <img src="images/logo.png" alt="" />
-            <span>
-              PlanLah
-            </span>
-          </div>
-          <div class="social_box">
-            <a>
-              <img src="images/fb.png" alt="">
-            </a>
-            <a>
-              <img src="images/instagram.png" alt="">
-            </a>
-          </div>
-        </div>
-
-        <div class="info_main">
-          <div class="row">
-            <div class="col-md-3 col-lg-2">
-              <div class="info_link-box">
-                <h5>
-                  Useful Link
-                </h5>
-                <ul>
-                  <li class=" active">
-                    <a class="" href="index.html">Home <span class="sr-only">(current)</span></a>
-                  </li>
-                  <li class="">
-                    <a class="" href="about.html">About </a>
-                  </li>
-                  <li class="">
-                    <a class="" href="features.html">Features </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-md-3 ">
-              <h5>
-                Offices
-              </h5>
-              <p>
-                Multimedia University, Persiaran Multimedia, 63100 Cyberjaya, Selangor, Malaysia<br><br>
-                Business Hours :
-                Mon-Fri (8.30am-5.00pm) (GMT+8)
-              </p>
-            </div>
-
-            <div class="col-md-3 col-lg-2 offset-lg-1">
-              <h5>
-                Information
-              </h5>
-              <p>
-                Readable content of a page when looking at its layoutreadable content of a page when looking at its layout
-              </p>
-            </div>
-
-            <div class="col-md-3  offset-lg-1">
-              <div class="info_form ">
-                <h5>
-                  Newsletter
-                </h5>
-                <form action="">
-                  <input type="email" placeholder="Email">
-                  <button>
-                    Subscribe
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-9 col-md-10 mx-auto">
-            <div class="info_contact layout_padding2">
-              <div class="row">
-                <div class="col-md-3">
-                  <a href="https://www.google.com/maps/dir//Multimedia+university+google+maps/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x31cdb6e4a9d3b7a1:0xd0f74e8ad10f1129?sa=X&ved=1t:3061&ictx=111" class="link-box">
-                    <div class="img-box">
-                      <img src="images/location.png" alt="">
-                    </div>
-                    <div class="detail-box">
-                      <h6>
-                        Location Offices
-                      </h6>
-                    </div>
-                  </a>
-                </div>
-                <div class="col-md-4">
-                  <a href="mailto:planlah.official.my@gmail.com?subject=Hello! PlanLah&body=I am interested to your service." class="link-box">
-                    <div class="img-box">
-                      <img src="images/mail.png" alt="">
-                    </div>
-                    <div class="detail-box">
-                      <h6>
-                        planlah.official.my@gmail.com
-                      </h6>
-                    </div>
-                  </a>
-                </div>
-                <div class="col-md-5">
-                  <a class="link-box">
-                    <div class="img-box">
-                      <img src="images/call.png" alt="">
-                    </div>
-                    <div class="detail-box">
-                      <h6>
-                        Call +60 1234567890
-                      </h6>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- end info section -->
+  
 
   <!-- footer section -->
   <footer class="container-fluid footer_section ">
@@ -222,7 +114,8 @@
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
   <script src="js/custom.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+  <script src="js/admin.js"></script>
 
 
 </body>
