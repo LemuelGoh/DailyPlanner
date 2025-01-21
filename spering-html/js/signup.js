@@ -17,10 +17,6 @@ firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore(firebase);
 
 
-// Add event listener to the form
-document.getElementById('register-submit-btn').addEventListener('click', submitForm);
-
-
 // Helper function to get element value
 const getElementVal = (id) => {
     return document.getElementById(id).value;
@@ -37,20 +33,30 @@ function showOTPVerificationForm() {
 }
 // END Show OTP form
 
+// Show OTP form
+function showPasswordRecoveryForm() {
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('register-form').classList.add('hidden');
+    document.getElementById('forget-password-form').classList.add('hidden');
+    document.getElementById('otp-verification-form').classList.add('hidden');
+    document.getElementById('password-recovery-form').classList.remove('hidden');
+}
+// END Show OTP form
+
 
 // SendMail()
-// function sendMail(email, otp){
-//     var params = {
-//         to_name : (email),
-//         OTP : (otp)
-//     }
-//     emailjs.send("service_es85yey", "template_g35cvdm", params).then(function(res){
-//         alert("OTP is succesful delivery!")
-//     })
-// }
+function sendMail(email, otp){
+    var params = {
+        to_name : (email),
+        OTP : (otp)
+    }
+    // emailjs.send("service_es85yey", "template_g35cvdm", params).then(function(res){
+    //     alert("OTP is succesful delivery!")
+    // })
+}
 // END SendMail()
 
-
+// ----------------------------------------------------------------------------------------
 // Function to handle form submission of the register
 function submitForm(e) {
     e.preventDefault();
@@ -77,6 +83,12 @@ function submitForm(e) {
     });}
 
 
+// Add event listener to the form of the register
+document.getElementById('register-submit-btn').addEventListener('click', submitForm);
+// ----------------------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------------------
 // Function to check if the email already exists in Firestore
 const checkIfEmailExists = (email) => {
     return db.collection("users")
@@ -97,8 +109,10 @@ const checkIfEmailExists = (email) => {
         });
 }
 // Function to check if the email already exists in Firestore
+// ----------------------------------------------------------------------------------------
 
 
+// ----------------------------------------------------------------------------------------
 // Function to generate a random OTP
 const generateOTP = () => {
     const otpLength = 6; // Length of OTP
@@ -110,8 +124,10 @@ const generateOTP = () => {
     return otp;
 };
 // Function to generate a random OTP
+// ----------------------------------------------------------------------------------------
 
 
+// ----------------------------------------------------------------------------------------
 // Function to save login info in Firestore
 const saveLoginInfo = (email, password) => {
     const otp = generateOTP(); // Generate the OTP
@@ -128,7 +144,7 @@ const saveLoginInfo = (email, password) => {
         status: "Not Activated"
     })
     .then(() => {
-        // sendMail(email,otp);
+        sendMail(email,otp);
         alert("Register Successful!");
     })
     .catch((error) => {
@@ -136,8 +152,10 @@ const saveLoginInfo = (email, password) => {
     });
 }
 // Function to save login info in Firestore
+// ----------------------------------------------------------------------------------------
 
 
+// ----------------------------------------------------------------------------------------
 //VERIFY OTP
 const verifyOTP = (email, inputOTP) => {
     // Step 1: Query the Firestore collection to find the document with the matching email
@@ -165,14 +183,18 @@ const verifyOTP = (email, inputOTP) => {
                         // OTP is valid, proceed with login or other actions
                     } else {
                         console.log("OTP has expired.");
+                        alert("OTP has expired.")
                         // Handle OTP expiration
                     }
                 } else {
                     console.log("Invalid OTP.");
+                    alert("Invalid OTP.")
                     // Handle invalid OTP
                 }
-            } else {
+            } 
+            else {
                 console.log("User not found.");
+                alert("User not found.")
             }
         })
         .catch((error) => {
@@ -182,7 +204,7 @@ const verifyOTP = (email, inputOTP) => {
 //VERIFY OTP
 
 
-//GET OTP
+//GET OTP FROM OTP REGISTRATION FORM BUTTON
 document.getElementById('otp-submit-btn').addEventListener('click', function (e) {
     e.preventDefault();
     
@@ -193,8 +215,10 @@ document.getElementById('otp-submit-btn').addEventListener('click', function (e)
     verifyOTP(email, inputOTP);
 });
 //GET OTP
+// ----------------------------------------------------------------------------------------
 
 
+// ----------------------------------------------------------------------------------------
 // LOGIN
 document.getElementById("login-submit-btn").addEventListener('click', login);
 function login(e) {
@@ -242,3 +266,181 @@ function login(e) {
         });
 }
 // END LOGIN
+// ----------------------------------------------------------------------------------------
+
+
+// LIMIT INPUT TO 6 INTEGER ONLY
+document.getElementById('verification-code').addEventListener('input', function (e) {
+    // Remove any non-digit characters
+    e.target.value = e.target.value.replace(/\D/g, '');
+  
+    // Trim the input to a maximum length of 6
+    if (e.target.value.length > 6) {
+      e.target.value = e.target.value.slice(0, 6);
+    }
+  });
+// LIMIT INPUT TO 6 INTEGER ONLY
+
+
+// ----------------------------------------------------------------------------------------
+// Request OTP at forget password
+const sendOTP = () => {
+    // Get the email input field
+    var email = getElementVal('forget-email');
+    db.collection("users").where("email", "==", email).get()
+    .then((querySnapshot) => {
+        if(!querySnapshot.empty) {
+            const userDoc = querySnapshot.docs[0];
+            const userId = userDoc.id;
+
+            // Genarate the new otp
+            const otp = generateOTP();
+            const expirationTime = firebase.firestore.Timestamp.fromMillis(Date.now() + 10 * 60 * 1000);
+            db.collection("users").doc(userId).update({
+                otp: otp,
+                otpExpirationTime: expirationTime,
+                otpGeneratedAt: firebase.firestore.FieldValue.serverTimestamp(),           }).then(() => {
+                sendMail(email,otp);
+                console.log(otp)
+                alert("OTP had sent to your email.");
+            }).catch((error) => {
+                console.error("Error updating user data: ", error);
+                alert("Error sending OTP. Please try again.");
+            });
+        }
+        else {
+            alert("User does not exist.");
+        }
+    })
+    .catch((error) => {
+        console.error("Error fetching user data: ", error);
+        alert("Error checking user. Please try again.")
+    });
+};
+// Request OTP at forget password
+
+
+// Eventlistener of send otp button
+document.getElementById("send-otp-btn").addEventListener('click', sendOTP);
+// ----------------------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------------------
+//VERIFY OTP and reset password
+const verifyOTPandreset = (email, inputOTP) => {
+    // Step 1: Query the Firestore collection to find the document with the matching email
+    db.collection("users").where("email", "==", email).get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                // Step 2: Get the userId (document ID) from the query result
+                const userDoc = querySnapshot.docs[0];
+                const userData = userDoc.data();
+                const storedOTP = userData.otp;
+                const otpExpirationTime = userData.otpExpirationTime;
+
+                // Step 3: Verify the OTP
+                if (inputOTP === storedOTP) {
+                    const currentTimestamp = new Date().getTime(); // Use local timestamp
+                    if (currentTimestamp < otpExpirationTime.toMillis()) {
+                        console.log("OTP is valid.");
+                        localStorage.setItem('loggedInUser', email);
+                        localStorage.setItem('loginStatus', 'loggedIn');
+                        showPasswordRecoveryForm();
+                        // OTP is valid, proceed with login or other actions
+                    } else {
+                        console.log("OTP has expired.");
+                        alert("OTP has expired.")
+                        // Handle OTP expiration
+                    }
+                } else {
+                    console.log("Invalid OTP.");
+                    alert("Invalid OTP.")
+                    // Handle invalid OTP
+                }
+            } 
+            else {
+                console.log("User not found.");
+                alert("User not found.")
+            }
+        })
+        .catch((error) => {
+            console.error("Error verifying OTP: ", error);
+        });
+};
+//VERIFY OTP and reset password
+
+
+// Eventlistener of reset password button
+document.getElementById("reset-password-btn").addEventListener('click', function(e){
+    e.preventDefault();
+    var email = getElementVal('forget-email');
+    const resetOTP = getElementVal('verification-code');
+
+    if (email.trim() === "") {
+        alert("Please enter your email.");
+        return;
+    }
+
+    if (resetOTP.trim() === "") {
+        alert("Please enter the verification code.");
+        return;
+    }
+
+    verifyOTPandreset(email,resetOTP);
+});
+// ----------------------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------------------
+// update new password after recovery password
+const updatePassword = (email, newPassword) => {
+    // Query the Firestore collection to find the document with the matching email
+    db.collection("users").where("email", "==", email).get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                // Get the user document
+                const userDoc = querySnapshot.docs[0];
+                const userId = userDoc.id;
+
+                // Update the user's password in Firestore
+                db.collection("users").doc(userId).update({
+                    password: newPassword // Ensure you hash the password in a real application
+                })
+                .then(() => {
+                    console.log("Password updated successfully.");
+                    alert("Your password has been updated successfully.");
+                    // Redirect to login page or other actions
+                    window.location.href = 'login.html';
+                })
+                .catch((error) => {
+                    console.error("Error updating password: ", error);
+                    alert("Error updating password.");
+                });
+            } else {
+                console.log("User not found.");
+                alert("User not found.");
+            }
+        })
+        .catch((error) => {
+            console.error("Error finding user: ", error);
+            alert("Error finding user.");
+        });
+};
+// update new password after recovery password
+
+// setting the new password button
+document.getElementById("set-newpassword-btn").addEventListener('click', function(e){
+    e.preventDefault();
+    var email = localStorage.getItem("loggedInUser")
+    var newPassword = getElementVal("new-password");
+    var renewPassword = getElementVal("re-new-password")
+
+    if(newPassword !== renewPassword) {
+        alert("Passwords do not match. Please re-enter the passwords.");
+        return;
+    }
+
+    updatePassword(email,newPassword);
+})
+// setting the new password button
+// ----------------------------------------------------------------------------------------
