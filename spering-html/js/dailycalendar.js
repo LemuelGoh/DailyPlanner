@@ -63,20 +63,7 @@ function generateTimeline(dayTasks) {
         timeline.appendChild(timeSlot);
     }
 }
-//loader
-// function hideLoader() {
-//     const loader = document.querySelector(".loader");
-//     loader.style.display = "none";
-//     const loaderContainer = document.getElementById("loaderContainer");
-//     loaderContainer.style.display = "none";
-// }
-// function showLoader() {
-//     const loader = document.querySelector(".loader");
-//     loader.style.display = "flex";
-//     const loaderContainer = document.getElementById("loaderContainer");
-//     loaderContainer.style.display = "flex";
-// }
-//-----------------------
+
 //manage task
 function taskAddEventListener() {
     const tasksDiv = document.getElementsByClassName("task");
