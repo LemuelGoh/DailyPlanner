@@ -1633,7 +1633,7 @@ input:checked + .slider:before {
   height: 120px; /* Higher height for the description field */
 }
 
-.setting-option {
+.setting-option4 {
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -466,23 +466,23 @@ function addtask() {
         <p>Add Task:</p>
         <div class="addtask-container">
             <div class="left-container" style="width: 60%; padding-right: 20px;">
-                <div class="setting-option">
+                <div class="setting-option4">
                     <label for="task-title">Title:</label>
                     <input type="text" id="task-title" class="task-input" placeholder="Enter task title" />
                 </div>
-                <div class="setting-option">
+                <div class="setting-option4">
                     <label for="task-time">Time:</label>
                     <input type="time" id="task-time" class="task-input" step="3600" />
                 </div>
-                <div class="setting-option">
+                <div class="setting-option4">
                     <label for="task-category">Category:</label>
                     <input type="text" id="task-category" class="task-input" placeholder="Enter task category" />
                 </div>
-                <div class="setting-option">
+                <div class="setting-option4">
                     <label for="task-description">Description:</label>
                     <textarea id="task-description" class="task-input" placeholder="Enter task description"></textarea>
                 </div>
-                <div class="setting-option">
+                <div class="setting-option4">
                     <label for="task-date">Date:</label>
                     <input type="date" id="task-date" class="task-input" />
                 </div>
