@@ -56,7 +56,7 @@ function fetchDayTasks(selectedDate) {
                 if (dateString === selectedDate) {
                     dayTasks.push({
                         uid: doc.id,
-                        description: data.description,
+                        title: data.title,
                         time: data.time,
                         priority: data.priority,
                         completed: data.completed
@@ -126,13 +126,12 @@ function generateTimeline(dayTasks) {
                     taskDiv.style.textDecoration = "line-through";
                 }
                 
-                taskDiv.textContent = task.description;
+                taskDiv.textContent = task.title;
                 taskDiv.setAttribute("data-uid", task.uid);
                 timeSlot.appendChild(taskDiv);
             });
         }
 
-        // 如果该时间段没有任务，显示提示
         if (!hasTasks) {
             const noTaskDiv = document.createElement("div");
             noTaskDiv.className = "no-task";
@@ -143,9 +142,6 @@ function generateTimeline(dayTasks) {
         timeline.appendChild(timeSlot);
     }
 }
-
-// 调用 fetchDayTasks 函数
-fetchDayTasks(selectedDate);
 
 //----------------------------
 function changeDay(offset) {
@@ -164,3 +160,5 @@ document.getElementById("prevDay").addEventListener("click",()=>{
 document.getElementById("nextDay").addEventListener("click",()=>{
     changeDay(1);
 })
+
+fetchDayTasks(selectedDate);
