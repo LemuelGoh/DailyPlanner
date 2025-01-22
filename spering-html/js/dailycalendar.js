@@ -57,14 +57,13 @@ function fetchDayTasks(selectedDate) {
                     dayTasks.push({
                         uid: doc.id,
                         description: data.description,
-                        time: data.time, // 假设任务对象中有 time 属性
+                        time: data.time,
                         priority: data.priority,
                         completed: data.completed
                     });
                 }
             });
 
-            // 生成时间轴
             generateTimeline(dayTasks);
         })
         .catch((error) => {
@@ -152,13 +151,11 @@ fetchDayTasks(selectedDate);
 function changeDay(offset) {
     currentDate.setDate(currentDate.getDate() + offset);
     dayDisplay.textContent = currentDate.toLocaleDateString(undefined, options);
-
-    // Clear and regenerate the timeline for the new date
-    const formattedDate = currentDate.toISOString().split("T")[0];
-    const dayTasks = tasks.filter(t => (t.date === formattedDate) || (t.date.substring(4) === formattedDate.substring(4) && t.repeat === "yearly") ||
-    (t.date.substring(8) === formattedDate.substring(8) && t.repeat === "monthly") || t.repeat === "daily"); // Filter tasks by current date
-    generateTimeline(dayTasks); // Pass filtered tasks to the timeline
-}//2025-01-24
+    date = document.getElementById("dayDisplay").textContent; // 获取日期字符串
+    const selectedDate = formatDateToYYYYMMDD(date); // 转换为 YYYY-MM-DD 格式
+    console.log(selectedDate);
+    fetchDayTasks(selectedDate);
+}
 
 //add eventlistener for left and right arrow change day
 document.getElementById("prevDay").addEventListener("click",()=>{
@@ -167,12 +164,3 @@ document.getElementById("prevDay").addEventListener("click",()=>{
 document.getElementById("nextDay").addEventListener("click",()=>{
     changeDay(1);
 })
-
-
-//--------------------
-// Initialize the timeline for the current date
-const formattedDate = currentDate.toISOString().split("T")[0];
-const dayTasks = tasks.filter(t => (t.date === formattedDate) || (t.date.substring(4) === formattedDate.substring(4) && t.repeat === "yearly") ||
-(t.date.substring(8) === formattedDate.substring(8) && t.repeat === "monthly") ||t.repeat === "daily"); //filter tasks to this day task only
-
-generateTimeline(dayTasks);
