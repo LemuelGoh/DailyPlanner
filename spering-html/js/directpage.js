@@ -440,15 +440,36 @@ function fetchFeedbackData() {
         const feedbackWidget = document.getElementById("feedback-widget");
         feedbackWidget.classList.add("hide");
     });
-}
 
+    document.getElementById("submit-feedback").addEventListener("click", function() {
+        var email = localStorage.getItem("loggedInUser");
+        const feedback = getElementVal('feedback-input');
+
+        db.collection("feedback").add({
+            email: email,
+            feedback: feedback,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            alert("Feedback Submitted Successfully");
+            fetchFeedbackData();
+        }).catch((error) => {
+            console.error("Error submitting feedback: ", error);
+            alert("Error submitting feedback.");
+        });
+    });
+}
+// FEEDBACK SUBMISSION BUTTON -------------------------------------------------------------------------
+
+
+// LOGOUT BUTTON ----------------------------------------------------------------------------------------
 document.getElementById("logout-btn").addEventListener('click', function() {
     localStorage.clear();
     console.log("User logged out successfully!");
     alert("Logged Out Successful")
     window.location.href = 'index.html';
 });
-// FEEDBACK SUBMISSION BUTTON -------------------------------------------------------------------------
+// LOGOUT BUTTON ----------------------------------------------------------------------------------------
+
 
 // ADD TASKS BUTTON ----------------------------------------------------------------------------------------
 document.getElementById("add-tasks-btn").addEventListener("click", function() {
@@ -460,7 +481,7 @@ document.getElementById("add-tasks-btn").addEventListener("click", function() {
 
 function addtask() {
     const addtaskWidget = document.getElementById("addtask-widget");
-    
+
     addtaskWidget.innerHTML = `
     <div class="task-widget">
         <p>Add Task:</p>
@@ -531,6 +552,45 @@ function addtask() {
     document.getElementById("close-addtask-widget").addEventListener("click", function() {
         const addtaskWidget = document.getElementById("addtask-widget");
         addtaskWidget.classList.add("hide");
+    });
+
+    document.getElementById("save-button").addEventListener("click", function() {
+        var email = localStorage.getItem("loggedInUser");
+        const title = getElementVal('task-title');
+        const time = getElementVal('task-time');
+        const category = getElementVal('task-category');
+        const description = getElementVal('task-description');
+        const date = getElementVal('task-date');
+        const reminder = getElementVal('task-reminder');
+        const priority = getElementVal('task-priority');
+        const recurring = getElementVal('task-recurring');
+        const markAsDone = document.getElementById('mark-as-done').checked;
+        // console.log(title, time, category, description, date, reminder, priority, recurring, markAsDone);
+        
+        const taskData = {
+            title: title,
+            time: time,
+            category: category,
+            description: description,
+            date: date,
+            reminder: reminder,
+            priority: priority,
+            recurring: recurring,
+            markAsDone: markAsDone,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp() // 添加创建时间
+        };
+    
+        // 使用电子邮件作为 ID 保存任务数据到子集合
+        db.collection("tasks").doc(email).collection("tasks").add(taskData) // 使用 add() 方法
+        .then(() => {
+            alert("Task Added Successfully");
+            addtask();
+            // 可以在这里添加成功提示或清空表单等操作
+        })
+        .catch((error) => {
+            alert("Error Adding Task");
+            console.log("Error adding task: ", error);
+        });
     });
 }
 
