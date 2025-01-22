@@ -27,7 +27,7 @@ function fetchTasks() {
             const tasksCountByDate = {};
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                const taskDate = data.date; // 将 date 字段转换为 Date 对象
+                const taskDate = data.date;
                 const dateString = new Date(taskDate).toISOString().split('T')[0];
                 
                 if (!tasksCountByDate[dateString]) {
@@ -35,7 +35,7 @@ function fetchTasks() {
                 }
                 tasksCountByDate[dateString]++;
             });
-            // 获取当前月份的任务并生成日历
+
             const currentYear = new Date().getFullYear();
             const currentMonth = new Date().getMonth(); // 0-11
             generateMonthCalendar(currentYear, currentMonth, tasksCountByDate);

@@ -1,6 +1,8 @@
 let currentDate = new Date();
 const options = { timeZone: 'Asia/Kuala_Lumpur', year: "numeric", month: "long", day: "numeric" }; //display format
 const dayDisplay = document.getElementById("dayDisplay");
+console.log(dayDisplay);
+
 
 //sync with tdy or redirect date from month/year
 if(sessionStorage.getItem("storageRedirectDate")==currentDate.toLocaleDateString('en-US', options)) { //if redirect date is tdy
@@ -12,23 +14,83 @@ else if(sessionStorage.getItem("storageRedirectDate")) {
     dayDisplay.textContent = sessionStorage.getItem("storageRedirectDate");
     sessionStorage.removeItem("storageRedirectDate");
 } else {
- //convert utc to malaysia time
-dayDisplay.textContent = currentDate.toLocaleDateString('en-US', options);
+    //convert utc to malaysia time
+    dayDisplay.textContent = currentDate.toLocaleDateString('en-US', options);
 }
 
 const tasks = [
     { date: "-1", time: "-1", description: "-1", priority:"-1",completed:"-1",repeat:"-1", uid:"-1"},
 ];
 
-// Function to generate the timeline
+function formatDateToYYYYMMDD(dayDisplay) {
+    // 将 dayDisplay 字符串解析为日期对象
+    const date = new Date(dayDisplay);
+    
+    // 提取年、月、日
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始，所以加 1
+    const day = String(date.getDate()).padStart(2, '0'); // 确保日是两位数
+    
+    // 返回格式化后的字符串
+    return `${year}-${month}-${day}`;
+}
+
+// 调用 fetchDayTasks 函数时传入特定日期
+date = document.getElementById("dayDisplay").textContent; // 获取日期字符串
+const selectedDate = formatDateToYYYYMMDD(date); // 转换为 YYYY-MM-DD 格式
+console.log(selectedDate);
+
+// FUNCTION TO FETCH DAILY TASKS
+function fetchDayTasks(selectedDate) {
+    const email = localStorage.getItem("loggedInUser");
+
+    db.collection("tasks").doc(email).collection("tasks").get()
+        .then((querySnapshot) => {
+            const dayTasks = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const taskDate = new Date(data.date); // 假设 date 是一个有效的日期字符串或时间戳
+                const dateString = taskDate.toISOString().split('T')[0];
+
+                // 仅获取与 selectedDate 匹配的任务
+                if (dateString === selectedDate) {
+                    dayTasks.push({
+                        uid: doc.id,
+                        description: data.description,
+                        time: data.time, // 假设任务对象中有 time 属性
+                        priority: data.priority,
+                        completed: data.completed
+                    });
+                }
+            });
+
+            // 生成时间轴
+            generateTimeline(dayTasks);
+        })
+        .catch((error) => {
+            console.error("Error fetching tasks: ", error);
+        });
+}
+
+
 function generateTimeline(dayTasks) {
     const timeline = document.getElementById("timeline");
-    timeline.innerHTML = ""; // Clear any existing content
+    timeline.innerHTML = ""; // 清空现有内容
+
+    // 预处理任务以提高性能
+    const tasksByTime = {};
+    dayTasks.forEach(task => {
+        const time = task.time; // 假设任务对象中有 time 属性
+        if (!tasksByTime[time]) {
+            tasksByTime[time] = [];
+        }
+        tasksByTime[time].push(task);
+    });
 
     for (let hour = 0; hour < 24; hour++) {
         const formattedHour = `${hour.toString().padStart(2, "0")}:00`;
     
-        // Create time slot
+        // 创建时间槽
         const timeSlot = document.createElement("div");
         timeSlot.className = "time-slot";
     
@@ -37,138 +99,55 @@ function generateTimeline(dayTasks) {
         hourLabel.textContent = formattedHour;
         timeSlot.appendChild(hourLabel);
     
+        let hasTasks = false; // 用于检查是否有任务
+
         for (let minute = 0; minute < 60; minute += 1) { 
             const formattedTime = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-            const tasksForTime = dayTasks.filter(t => t.time === formattedTime);
-      
+            const tasksForTime = tasksByTime[formattedTime] || []; // 获取该时间的任务
+            
+            if (tasksForTime.length > 0) {
+                hasTasks = true; // 标记该时间段有任务
+            }
+
             tasksForTime.forEach(task => {
-              const taskDiv = document.createElement("div");
-              taskDiv.className = "task";
-              if(task.priority == "high") { //change task description color according to priority
-                taskDiv.style.color = "#ff1e00";
-              } else if (task.priority == "medium") {
-                taskDiv.style.color = "orange";
-              } else if (task.priority == "low") {
-                taskDiv.style.color = "#5de651";
-              }
-              if(task.completed) {
-                taskDiv.style.textDecoration = "line-through";
-              }
-              taskDiv.textContent = task.description;
-              taskDiv.setAttribute("data-uid",task.uid);
-              timeSlot.appendChild(taskDiv);
+                const taskDiv = document.createElement("div");
+                taskDiv.className = "task";
+                
+                // 根据优先级设置任务描述颜色
+                if (task.priority === "high") {
+                    taskDiv.style.color = "#ff1e00";
+                } else if (task.priority === "medium") {
+                    taskDiv.style.color = "orange";
+                } else if (task.priority === "low") {
+                    taskDiv.style.color = "#5de651";
+                }
+                
+                // 完成状态
+                if (task.completed) {
+                    taskDiv.style.textDecoration = "line-through";
+                }
+                
+                taskDiv.textContent = task.description;
+                taskDiv.setAttribute("data-uid", task.uid);
+                timeSlot.appendChild(taskDiv);
             });
         }
-    
+
+        // 如果该时间段没有任务，显示提示
+        if (!hasTasks) {
+            const noTaskDiv = document.createElement("div");
+            noTaskDiv.className = "no-task";
+            noTaskDiv.textContent = "No tasks";
+            timeSlot.appendChild(noTaskDiv);
+        }
+
         timeline.appendChild(timeSlot);
     }
 }
 
-//manage task
-function taskAddEventListener() {
-    const tasksDiv = document.getElementsByClassName("task");
-    const mainContainer = document.getElementById("dailyCalendarContainer");
-    const addTaskBtn = document.getElementById("addTaskButton");
-    const updateTaskBtn = document.getElementById("updateTaskButton");
-    const manageTaskContainer = document.getElementById("manageTaskContainer");
-    for(let i = 0; i < tasksDiv.length; i++) { //loop thru every task in the day
-        tasksDiv[i].addEventListener("click", ()=> { //add event listener for every task
-            const task = tasks.find(event => tasksDiv[i].getAttribute("data-uid") === event.uid); //get task inside tasks array
+// 调用 fetchDayTasks 函数
+fetchDayTasks(selectedDate);
 
-            let descriptionDiv = document.getElementById("description");
-            descriptionDiv.textContent = `Description: ${task.description}`;
-            let startTimeDiv = document.getElementById("startTime");
-            startTimeDiv.textContent = `Start Time: ${task.time}`;
-            let dateDiv = document.getElementById("date");
-            dateDiv.textContent = `Date: ${task.date}`;
-            let priorityDiv = document.getElementById("priority");
-            priorityDiv.textContent = `Priority: ${task.priority}`;
-            const completeCheckbox = document.getElementById("checkbox");
-            if(task.completed) completeCheckbox.checked = true;
-            let repeatDiv = document.getElementById("repeat");
-            repeatDiv.textContent = `Repeat: ${task.repeat}`;
-            
-            mainContainer.classList.add("hide") //hide mainContainer
-            addTaskBtn.classList.add("hide") //hide add task button
-            manageTaskContainer.classList.remove("hide");//show manage task container
-
-            //addeventlistener to descriptionDiv, startTimeDiv, dateDiv, priorityDiv, repeatDiv
-            descriptionDiv.addEventListener("click",()=>{
-                const descriptionInput = prompt("Enter New Description");
-                if(descriptionInput)
-                descriptionDiv.textContent = `Description: ${descriptionInput}`;
-            })
-            startTimeDiv.addEventListener("click",()=>{
-                const startTimeInput = prompt("Enter new task time (HH:MM, 24-hour format):");
-                if(startTimeInput)
-                startTimeDiv.textContent = `Start Time: ${startTimeInput}`;
-            })
-            dateDiv.addEventListener("click",()=>{
-                const dateInput = prompt("Enter New Date (YYYY-MM-DD)");
-                if(dateInput)
-                dateDiv.textContent = `Date: ${dateInput}`;
-            })
-            priorityDiv.addEventListener("click",()=>{
-                const priorityInput = prompt("Enter New Priority (high,medium,low)");
-                if(priorityInput)
-                priorityDiv.textContent = `Priority: ${priorityInput}`;
-            })
-            repeatDiv.addEventListener("click",()=>{
-                const repeatInput = prompt("Enter New Repeat: (yearly,monthly,daily, none)");
-                if(repeatInput)
-                    repeatDiv.textContent = `Repeat: ${repeatInput}`;
-            })
-            //addeventlistener to remove
-            document.getElementById("removeTaskButton").addEventListener("click",()=>{
-                showLoader();
-                const taskRef = doc(firestore,"users",localStorage.getItem("user"),"tasks",task.uid);
-                deleteDoc(taskRef).then(()=>{hideLoader();alert("Task Deleted");window.location.href = "dailyCalendar.html";});
-            })
-
-            // addeventlistener to update
-            updateTaskBtn.addEventListener("click",()=>{
-                showLoader();
-                const taskRef = doc(firestore,"users",localStorage.getItem("user"),"tasks",task.uid);
-                if(completeCheckbox.checked){
-                    updateDoc(taskRef,{
-                        Description: descriptionDiv.textContent.substring(13),
-                        StartTime: startTimeDiv.textContent.substring(12),
-                        date:  dateDiv.textContent.substring(6),
-                        priority: priorityDiv.textContent.substring(10),
-                        completed:true,
-                        repeat: repeatDiv.textContent.substring(8),
-                    }).then(()=>{
-                        hideLoader();
-                        alert("Update Successfully!");
-                        window.location.href = "dailyCalendar.html";
-                    })
-                } else {
-                    updateDoc(taskRef,{
-                        Description: descriptionDiv.textContent.substring(13),
-                        StartTime: startTimeDiv.textContent.substring(12),
-                        date:  dateDiv.textContent.substring(6),
-                        priority: priorityDiv.textContent.substring(10),
-                        repeat: repeatDiv.textContent.substring(8),
-                        completed:false,
-                    }).then(()=>{
-                        hideLoader();
-                        alert("Update Successfully!");
-                        window.location.href = "dailyCalendar.html";
-                    })
-                }
-            })
-
-        })
-    }
-}
-// document.getElementById("close").addEventListener("click",()=> {
-//     const mainContainer = document.getElementById("dailyCalendarContainer");
-//     const manageTaskContainer = document.getElementById("manageTaskContainer");
-//     const addTaskBtn = document.getElementById("addTaskButton");
-//     mainContainer.classList.remove("hide"); //show mainContainer
-//     addTaskBtn.classList.remove("hide"); //show add task button
-//     manageTaskContainer.classList.add("hide"); //hide manageTaskContainer
-// })
 //----------------------------
 function changeDay(offset) {
     currentDate.setDate(currentDate.getDate() + offset);
@@ -179,8 +158,8 @@ function changeDay(offset) {
     const dayTasks = tasks.filter(t => (t.date === formattedDate) || (t.date.substring(4) === formattedDate.substring(4) && t.repeat === "yearly") ||
     (t.date.substring(8) === formattedDate.substring(8) && t.repeat === "monthly") || t.repeat === "daily"); // Filter tasks by current date
     generateTimeline(dayTasks); // Pass filtered tasks to the timeline
-    taskAddEventListener();
 }//2025-01-24
+
 //add eventlistener for left and right arrow change day
 document.getElementById("prevDay").addEventListener("click",()=>{
     changeDay(-1);
@@ -190,9 +169,6 @@ document.getElementById("nextDay").addEventListener("click",()=>{
 })
 
 
-
-
-
 //--------------------
 // Initialize the timeline for the current date
 const formattedDate = currentDate.toISOString().split("T")[0];
@@ -200,5 +176,3 @@ const dayTasks = tasks.filter(t => (t.date === formattedDate) || (t.date.substri
 (t.date.substring(8) === formattedDate.substring(8) && t.repeat === "monthly") ||t.repeat === "daily"); //filter tasks to this day task only
 
 generateTimeline(dayTasks);
-taskAddEventListener();
-// hideLoader();
