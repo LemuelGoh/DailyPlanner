@@ -1,25 +1,8 @@
-//init firebase
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-// import { getFirestore, collection,getDocs,query,where } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyBkBwCTHw56P2qs1n_Yl4HVVNhf0wNx1XM",
-//   authDomain: "project-daily-planner.firebaseapp.com",
-//   projectId: "project-daily-planner",
-//   storageBucket: "project-daily-planner.firebasestorage.app",
-//   messagingSenderId: "341596285306",
-//   appId: "1:341596285306:web:90197e8c4b3bcc181ecec3",
-//   measurementId: "G-LDCB4F40NF"
-// };
-// const app = initializeApp(firebaseConfig);
-// const firestore = getFirestore(app);
-//-------------
-
 //check if user logged in
-// if(!localStorage.getItem("user")) {
-//     alert("Please Log In before using the calendar!");
-//     window.location.href = "login.html";
-// }
+if(!localStorage.getItem("loggedInUser")) {
+    alert("Please Log In before using the calendar!");
+    window.location.href = "login.html";
+}
 //--------------
 
 let currentYear = new Date().getFullYear();
@@ -36,20 +19,45 @@ const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Frida
 
 const tasksDate = [{month:-1,day:-1,year:-1,repeat:-1}];
 
+function fetchTasks() {
+    const email = localStorage.getItem("loggedInUser");
 
-function generateMonth(year, month) {
+    db.collection("tasks").doc(email).collection("tasks").get()
+        .then((querySnapshot) => {
+            const tasksCountByDate = {};
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const taskDate = data.date; // 将 date 字段转换为 Date 对象
+                const dateString = new Date(taskDate).toISOString().split('T')[0];
+                
+                if (!tasksCountByDate[dateString]) {
+                    tasksCountByDate[dateString] = 0;
+                }
+                tasksCountByDate[dateString]++;
+            });
+            // 获取当前月份的任务并生成日历
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth(); // 0-11
+            generateMonthCalendar(currentYear, currentMonth, tasksCountByDate);
+            addDaysEventListener();
+        })
+        .catch((error) => {
+            console.error("Error fetching tasks: ", error);
+        });
+}
+
+function generateMonth(year, month, tasksCountByDate) {
+    // const tasksCountByDate = 1; // 用于存储每个日期的任务数量 
+       
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    const filterYrMnth = tasksDate.filter(t => (t.year === year && t.month === month + 1) || t.repeat === "daily" || t.repeat === "monthly" || (t.month === month + 1 && t.repeat === "yearly"));
-    
     const monthDiv = document.createElement("div");
     monthDiv.className = "month-year";
 
     // Day names row
     const daysDiv = document.createElement("div");
     daysDiv.className = "days";
-
 
     // Empty spaces before the first day of the month
     for (let i = 0; i < firstDay; i++) {
@@ -65,9 +73,13 @@ function generateMonth(year, month) {
         const dayDiv = document.createElement("div");
         dayDiv.className = "day";
         dayDiv.textContent = day;
+
+        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const taskCount = tasksCountByDate[dateString] || 0; // 获取该日期的任务数量，默认为 0
+
         const tasksAmountDiv = document.createElement("div");
         tasksAmountDiv.className = "tasksAmount";
-        tasksAmountDiv.textContent = "task";
+        tasksAmountDiv.textContent = `${taskCount} tasks`; // 显示任务数量
 
         container.appendChild(dayDiv);
         container.appendChild(tasksAmountDiv);
@@ -78,14 +90,18 @@ function generateMonth(year, month) {
     return monthDiv;
 }
 
-function generateMonthCalendar(year, month) {
+fetchTasks(); // 调用函数以获取任务并生成日历
+
+function generateMonthCalendar(year, month, tasksCountByDate) {
     monthlyCalendarContainer.innerHTML = ""; // Clear old monthly calendar
-    const monthCalendar = generateMonth(year, month);
+    const monthCalendar = generateMonth(year, month, tasksCountByDate);
     monthlyCalendarContainer.appendChild(monthCalendar);
     monthDisplay.textContent = `${monthNames[month]}, ${year}`;
     addDaysEventListener();
 }
 
+
+// Change Month ----------------------------------------------------------------------------------
 function changeMonth(offset) {
     currentMonth += offset;
 
@@ -97,13 +113,9 @@ function changeMonth(offset) {
         currentMonth = 11;
         currentYear--;
     }
-    generateMonthCalendar(currentYear, currentMonth);
+    generateMonthCalendar(currentYear, currentMonth, tasksCountByDate);
     addDaysEventListener();
 }
-
-
-generateMonthCalendar(currentYear, currentMonth);
-addDaysEventListener();
 
 document.getElementById("prevMonth").addEventListener("click", () => {
     changeMonth(-1);
@@ -112,6 +124,7 @@ document.getElementById("prevMonth").addEventListener("click", () => {
 document.getElementById("nextMonth").addEventListener("click", () => {
     changeMonth(1);
 });
+// Change Month ----------------------------------------------------------------------------------
 
 
 function addDaysEventListener() {

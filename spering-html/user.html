@@ -22,6 +22,21 @@
   <link href="css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
+  <script type="module">
+    // 使用 ES6 模块导入 Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+
+    // Firebase 配置
+    const firebaseConfig = {
+      apiKey: "AIzaSyDvQKch6kMq9J8KffpuiogfDoaOUAk8aWo",
+      authDomain: "planlah-16aef.firebaseapp.com",
+      projectId: "planlah-16aef",
+      storageBucket: "planlah-16aef.firebasestorage.app",
+      messagingSenderId: "638721515088",
+      appId: "1:638721515088:web:9f4208ac42875abcacfb55"
+    };
+  </script>
 </head>
 
 <body class="sub_page">
@@ -338,9 +353,9 @@
   <!------------------------------------------------- Java Script ---------------------------------------------------->
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
-  <script src="js/monthlycalendar.js"></script>
   <script src="js/custom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+  <script type="module" src="js/monthlycalendar.js"></script>
   <script src="js/directpage.js"></script>
   <!------------------------------------------------- Java Script ---------------------------------------------------->
 

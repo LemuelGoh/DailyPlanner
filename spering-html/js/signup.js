@@ -239,7 +239,6 @@ function login(e) {
                 const doc = querySnapshot.docs[0];
                 const userData = doc.data();
                 const storedPassword = userData.password; // Assuming password is stored in plaintext (NOTE: should hash passwords in real apps)
-                console.log(storedPassword)
 
                 // Manually check if the entered password matches the stored password
                 if (password === storedPassword) {
@@ -404,6 +403,8 @@ const updatePassword = (email, newPassword) => {
                 // Get the user document
                 const userDoc = querySnapshot.docs[0];
                 const userId = userDoc.id;
+                const userData = userDoc.data();
+                const email = userData.email;
 
                 // Update the user's password in Firestore
                 db.collection("users").doc(userId).update({
@@ -412,6 +413,8 @@ const updatePassword = (email, newPassword) => {
                 .then(() => {
                     console.log("Password updated successfully.");
                     alert("Your password has been updated successfully.");
+                    localStorage.setItem('loggedInUser', email);
+                    localStorage.setItem('isLoggedIn', 'true');
                     // Redirect to login page or other actions
                     window.location.href = 'login.html';
                 })
