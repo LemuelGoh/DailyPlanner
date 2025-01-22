@@ -79,7 +79,7 @@ function generateMonth(year, month, tasksCountByDate) {
 
         const tasksAmountDiv = document.createElement("div");
         tasksAmountDiv.className = "tasksAmount";
-        tasksAmountDiv.textContent = `${taskCount} tasks`; // 显示任务数量
+        tasksAmountDiv.textContent = `${taskCount} TASKS`; // 显示任务数量
 
         container.appendChild(dayDiv);
         container.appendChild(tasksAmountDiv);
