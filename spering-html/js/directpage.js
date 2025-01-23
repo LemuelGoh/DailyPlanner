@@ -571,6 +571,11 @@ function addtask() {
         const enddate = getElementVal('end-reccuring-date');
         const markAsDone = document.getElementById('mark-as-done').checked;
         
+        if (!email || !title || !date) {
+            alert("Please fill in all required fields!");
+            return;
+        }
+
         const taskData = {
             title: title,
             time: time,
@@ -586,15 +591,38 @@ function addtask() {
         };
     
 
-        db.collection("tasks").doc(email).collection("tasks").add(taskData)
-        .then(() => {
-            alert("Task Added Successfully");
-            addtask();
-        })
-        .catch((error) => {
-            alert("Error Adding Task");
-            console.log("Error adding task: ", error);
-        });
+        if (recurring > 0 && date && enddate) {
+            let currentDate = new Date(date); // Start date
+            const endRecurringDate = new Date(enddate); // End date
+        
+            // Loop to add recurring tasks until the currentDate exceeds the end date
+            while (currentDate <= endRecurringDate) {
+                // Create a task with the updated date
+                const taskWithDate = {
+                    ...taskData,
+                    date: currentDate.toISOString().split("T")[0], // Format date as YYYY-MM-DD
+                };
+        
+                // Add the task to the database
+                db.collection("tasks").doc(email).collection("tasks").add(taskWithDate)
+                    .catch((error) => console.error("Error adding recurring task: ", error));
+        
+                // Increment the date safely
+                currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + parseInt(recurring));
+            }
+        
+            alert("Recurring tasks added successfully!");
+        } else {
+            // If no recurring interval is set, add the task once
+            const taskWithDate = { ...taskData, date: date };
+            db.collection("tasks").doc(email).collection("tasks").add(taskWithDate)
+                .then(() => alert("Task added successfully!"))
+                .catch((error) => console.error("Error adding task: ", error));
+        }
+
+        // Hide the add task widget after saving
+        addtaskWidget.classList.add("hide");
+
     });
 }
 // ADD TASKS BUTTON ----------------------------------------------------------------------------------------

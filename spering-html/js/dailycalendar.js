@@ -214,7 +214,7 @@ function edittask(taskId) {
                         </div>
                         <div class="setting-option3">
                         <label for="task-recurring">Task Recurring:</label>
-                            <select id="task-recurring" class="task-input">
+                            <select id="task-recurring" class="task-input" disabled>
                                 <option value="0" ${taskData.recurring === '0' ? 'selected' : ''}>None</option>
                                 <option value="1" ${taskData.recurring === '1' ? 'selected' : ''}>Day</option>
                                 <option value="7" ${taskData.recurring === '7' ? 'selected' : ''}>Week</option>
@@ -230,13 +230,40 @@ function edittask(taskId) {
                             <input type="checkbox" id="mark-as-done" ${taskData.markAsDone ? 'checked' : ''} />
                         </div>
                         <div class="setting-option2">
-                            <button id="close-edittask-widget" class="close-button" >Cancel</button>
+                            <button id="close-edittask-widget" class="close-button">Cancel</button>
+                            <button id="delete-task-button" class="close-button" style="background-color: red; color: white;">Delete</button>
                             <button id="save-button" class="close-button">Save</button>
                         </div>
                     </div>
                 </div>
             </div>
             `;
+            // Add Delete button event listener
+            document.getElementById("delete-task-button").addEventListener("click", function () {
+                // Confirm with the user before deleting the task
+                const confirmDelete = confirm("Are you sure you want to delete this task?");
+                if (confirmDelete) {
+                    const email = localStorage.getItem("loggedInUser"); // Assuming logged-in user is stored in localStorage
+            
+                    // Delete the task from the database
+                    db.collection("tasks")
+                        .doc(email)
+                        .collection("tasks")
+                        .doc(taskId)
+                        .delete()
+                        .then(() => {
+                            alert("Task deleted successfully.");
+                            // Hide the edit task widget after deletion
+                            document.getElementById("edittask-widget").classList.add("hide");
+                            const selectedDate = formatDateToYYYYMMDD(date);
+                            fetchDayTasks(selectedDate);
+                        })
+                        .catch((error) => {
+                            console.error("Error deleting task: ", error);
+                            alert("Failed to delete the task. Please try again.");
+                        });
+                }
+            });
 
             // Add Cancel and Save button event listeners
             document.getElementById("close-edittask-widget").addEventListener("click", function () {
