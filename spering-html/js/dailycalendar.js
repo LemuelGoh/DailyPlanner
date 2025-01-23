@@ -23,24 +23,21 @@ const tasks = [
 ];
 
 function formatDateToYYYYMMDD(dayDisplay) {
-    // 将 dayDisplay 字符串解析为日期对象
     const date = new Date(dayDisplay);
     
-    // 提取年、月、日
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始，所以加 1
-    const day = String(date.getDate()).padStart(2, '0'); // 确保日是两位数
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
     
-    // 返回格式化后的字符串
     return `${year}-${month}-${day}`;
 }
 
-// 调用 fetchDayTasks 函数时传入特定日期
-date = document.getElementById("dayDisplay").textContent; // 获取日期字符串
-const selectedDate = formatDateToYYYYMMDD(date); // 转换为 YYYY-MM-DD 格式
+
+
+date = document.getElementById("dayDisplay").textContent;
+const selectedDate = formatDateToYYYYMMDD(date);
 console.log(selectedDate);
 
-// FUNCTION TO FETCH DAILY TASKS
 function fetchDayTasks(selectedDate) {
     const email = localStorage.getItem("loggedInUser");
 
@@ -49,7 +46,7 @@ function fetchDayTasks(selectedDate) {
             const dayTasks = [];
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                const taskDate = new Date(data.date); // 假设 date 是一个有效的日期字符串或时间戳
+                const taskDate = new Date(data.date);
                 const dateString = taskDate.toISOString().split('T')[0];
 
                 // 仅获取与 selectedDate 匹配的任务
@@ -59,7 +56,7 @@ function fetchDayTasks(selectedDate) {
                         title: data.title,
                         time: data.time,
                         priority: data.priority,
-                        completed: data.completed
+                        completed: data.markAsDone
                     });
                 }
             });
@@ -71,15 +68,13 @@ function fetchDayTasks(selectedDate) {
         });
 }
 
-
 function generateTimeline(dayTasks) {
     const timeline = document.getElementById("timeline");
-    timeline.innerHTML = ""; // 清空现有内容
+    timeline.innerHTML = "";
 
-    // 预处理任务以提高性能
     const tasksByTime = {};
     dayTasks.forEach(task => {
-        const time = task.time; // 假设任务对象中有 time 属性
+        const time = task.time;
         if (!tasksByTime[time]) {
             tasksByTime[time] = [];
         }
@@ -89,7 +84,6 @@ function generateTimeline(dayTasks) {
     for (let hour = 0; hour < 24; hour++) {
         const formattedHour = `${hour.toString().padStart(2, "0")}:00`;
     
-        // 创建时间槽
         const timeSlot = document.createElement("div");
         timeSlot.className = "time-slot";
     
@@ -98,35 +92,49 @@ function generateTimeline(dayTasks) {
         hourLabel.textContent = formattedHour;
         timeSlot.appendChild(hourLabel);
     
-        let hasTasks = false; // 用于检查是否有任务
+        let hasTasks = false;
 
         for (let minute = 0; minute < 60; minute += 1) { 
             const formattedTime = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-            const tasksForTime = tasksByTime[formattedTime] || []; // 获取该时间的任务
+            const tasksForTime = tasksByTime[formattedTime] || [];
             
             if (tasksForTime.length > 0) {
-                hasTasks = true; // 标记该时间段有任务
+                hasTasks = true;
             }
 
             tasksForTime.forEach(task => {
                 const taskDiv = document.createElement("div");
                 taskDiv.className = "task";
                 
-                // 根据优先级设置任务描述颜色
-                if (task.priority === "high") {
-                    taskDiv.style.color = "#ff1e00";
-                } else if (task.priority === "medium") {
-                    taskDiv.style.color = "orange";
-                } else if (task.priority === "low") {
-                    taskDiv.style.color = "#5de651";
-                }
+                // Create a button and add it to the taskDiv
+                const taskButton = document.createElement("button");
+                taskButton.textContent = task.title; // Set the button's text to the task title
+                taskButton.className = "option-button"; // Add a class for styling the button
+                taskButton.id = "edit-task-btn";
                 
-                // 完成状态
                 if (task.completed) {
-                    taskDiv.style.textDecoration = "line-through";
+                    taskButton.style.setProperty("text-decoration", "line-through", "important");
                 }
                 
-                taskDiv.textContent = task.title;
+                // Set the button's text color based on task priority
+                if (task.priority === "high") {
+                    taskButton.style.color = "#ff1e00"; // High priority color
+                } else if (task.priority === "medium") {
+                    taskButton.style.color = "orange"; // Medium priority color
+                } else if (task.priority === "low") {
+                    taskButton.style.color = "#5de651"; // Low priority color
+                }
+                
+                // Add an event listener for button clicks
+                taskButton.addEventListener("click", (e) => {
+                    e.stopPropagation(); // Prevent the click event from propagating to the taskDiv
+                    const editTaskWidget = document.getElementById("edittask-widget");
+                    // Toggle the visibility of the profile widget
+                    editTaskWidget.classList.toggle("hide");
+                    edittask(task.uid);
+                });
+
+                taskDiv.appendChild(taskButton);
                 taskDiv.setAttribute("data-uid", task.uid);
                 timeSlot.appendChild(taskDiv);
             });
@@ -143,12 +151,142 @@ function generateTimeline(dayTasks) {
     }
 }
 
+
+// EDIT TASKS BUTTON ----------------------------------------------------------------------------------------
+function edittask(taskId) {
+    const editTaskWidget = document.getElementById("edittask-widget");
+    const email = localStorage.getItem("loggedInUser");
+
+    db.collection("tasks")
+    .doc(email)
+    .collection("tasks")
+    .doc(taskId)
+    .get()
+    .then((doc) => {
+        if (doc.exists) {
+            const taskData = doc.data();
+
+            // Dynamically update the innerHTML with fetched task data
+            editTaskWidget.innerHTML = `
+            <div class="task-widget">
+                <p>Edit Task:</p>
+                <div class="addtask-container">
+                    <div class="left-container" style="width: 60%; padding-right: 20px;">
+                        <div class="setting-option4">
+                            <label for="task-title">Title:</label>
+                            <input type="text" id="task-title" class="task-input" value="${taskData.title || ''}" placeholder="Enter task title" />
+                        </div>
+                        <div class="setting-option4">
+                            <label for="task-time">Time:</label>
+                            <input type="time" id="task-time" class="task-input" value="${taskData.time || ''}" step="3600" />
+                        </div>
+                        <div class="setting-option4">
+                            <label for="task-category">Category:</label>
+                            <input type="text" id="task-category" class="task-input" value="${taskData.category || ''}" placeholder="Enter task category" />
+                        </div>
+                        <div class="setting-option4">
+                            <label for="task-description">Description:</label>
+                            <textarea id="task-description" class="task-input" placeholder="Enter task description">${taskData.description || ''}</textarea>
+                        </div>
+                        <div class="setting-option4">
+                            <label for="task-date">Date:</label>
+                            <input type="date" id="task-date" class="task-input" value="${taskData.date || ''}" />
+                        </div>
+                    </div>
+                    <div class="right-container2" style="width: 40%;">
+                        <div class="setting-option3">
+                            <label for="task-reminder">Reminder:</label>
+                            <select id="task-reminder" class="task-input">
+                                <option value="0" ${taskData.reminder === '0' ? 'selected' : ''}>None</option>
+                                <option value="15" ${taskData.reminder === '15' ? 'selected' : ''}>15 mins</option>
+                                <option value="30" ${taskData.reminder === '30' ? 'selected' : ''}>30 mins</option>
+                                <option value="45" ${taskData.reminder === '45' ? 'selected' : ''}>45 mins</option>
+                                <option value="60" ${taskData.reminder === '60' ? 'selected' : ''}>60 mins</option>
+                            </select>
+                        </div>
+                        <div class="setting-option3">
+                            <label for="task-priority">Priority:</label>
+                            <select id="task-priority" class="task-input">
+                                <option value="low" ${taskData.priority === 'low' ? 'selected' : ''}>Low</option>
+                                <option value="medium" ${taskData.priority === 'medium' ? 'selected' : ''}>Medium</option>
+                                <option value="high" ${taskData.priority === 'high' ? 'selected' : ''}>High</option>
+                            </select>
+                        </div>
+                        <div class="setting-option3">
+                            <label for="task-recurring">Task Recurring:</label>
+                            <select id="task-recurring" class="task-input">
+                                <option value="0" ${taskData.recurring === '0' ? 'selected' : ''}>None</option>
+                                <option value="1" ${taskData.recurring === '1' ? 'selected' : ''}>Day</option>
+                                <option value="7" ${taskData.recurring === '7' ? 'selected' : ''}>Week</option>
+                                <option value="30" ${taskData.recurring === '30' ? 'selected' : ''}>Month</option>
+                            </select>
+                        </div>
+                        <div class="setting-option3">
+                            <label for="mark-as-done">Mark as Done:</label>
+                            <input type="checkbox" id="mark-as-done" ${taskData.markAsDone ? 'checked' : ''} />
+                        </div>
+                        <div class="setting-option2">
+                            <button id="close-edittask-widget" class="close-button" >Cancel</button>
+                            <button id="save-button" class="close-button">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+
+            // Add Cancel and Save button event listeners
+            document.getElementById("close-edittask-widget").addEventListener("click", function () {
+                editTaskWidget.classList.add("hide");
+            });
+
+            document.getElementById("save-button").addEventListener("click", function () {
+                const updatedTaskData = {
+                    title: document.getElementById("task-title").value,
+                    time: document.getElementById("task-time").value,
+                    category: document.getElementById("task-category").value,
+                    description: document.getElementById("task-description").value,
+                    date: document.getElementById("task-date").value,
+                    reminder: document.getElementById("task-reminder").value,
+                    priority: document.getElementById("task-priority").value,
+                    recurring: document.getElementById("task-recurring").value,
+                    markAsDone: document.getElementById("mark-as-done").checked,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                db.collection("tasks")
+                    .doc(email)
+                    .collection("tasks")
+                    .doc(taskId)
+                    .update(updatedTaskData)
+                    .then(() => {
+                        alert("Task updated successfully");
+                        editTaskWidget.classList.add("hide");
+                        date = document.getElementById("dayDisplay").textContent;
+                        const selectedDate = formatDateToYYYYMMDD(date);
+                        fetchDayTasks(selectedDate);
+                    })
+                    .catch((error) => {
+                        console.error("Error updating task: ", error);
+                        alert("Error updating task");
+                    });
+            });
+        } else {
+            console.error("Task not found!");
+        }
+    })
+    .catch((error) => {
+        console.error("Error fetching task: ", error);
+    });
+}
+// EDIT TASKS BUTTON ----------------------------------------------------------------------------------------
+
+
 //----------------------------
 function changeDay(offset) {
     currentDate.setDate(currentDate.getDate() + offset);
     dayDisplay.textContent = currentDate.toLocaleDateString(undefined, options);
-    date = document.getElementById("dayDisplay").textContent; // 获取日期字符串
-    const selectedDate = formatDateToYYYYMMDD(date); // 转换为 YYYY-MM-DD 格式
+    date = document.getElementById("dayDisplay").textContent;
+    const selectedDate = formatDateToYYYYMMDD(date);
     console.log(selectedDate);
     fetchDayTasks(selectedDate);
 }

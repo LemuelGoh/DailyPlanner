@@ -565,7 +565,6 @@ function addtask() {
         const priority = getElementVal('task-priority');
         const recurring = getElementVal('task-recurring');
         const markAsDone = document.getElementById('mark-as-done').checked;
-        // console.log(title, time, category, description, date, reminder, priority, recurring, markAsDone);
         
         const taskData = {
             title: title,
@@ -577,15 +576,14 @@ function addtask() {
             priority: priority,
             recurring: recurring,
             markAsDone: markAsDone,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp() // 添加创建时间
+            createdAt: firebase.firestore.FieldValue.serverTimestamp() 
         };
     
-        // 使用电子邮件作为 ID 保存任务数据到子集合
-        db.collection("tasks").doc(email).collection("tasks").add(taskData) // 使用 add() 方法
+
+        db.collection("tasks").doc(email).collection("tasks").add(taskData)
         .then(() => {
             alert("Task Added Successfully");
             addtask();
-            // 可以在这里添加成功提示或清空表单等操作
         })
         .catch((error) => {
             alert("Error Adding Task");
@@ -593,6 +591,10 @@ function addtask() {
         });
     });
 }
+// ADD TASKS BUTTON ----------------------------------------------------------------------------------------
+
+
+
 
 document.getElementById("logout-btn").addEventListener('click', function() {
     localStorage.clear();
@@ -600,4 +602,3 @@ document.getElementById("logout-btn").addEventListener('click', function() {
     alert("Logged Out Successful")
     window.location.href = 'index.html';
 });
-// ADD TASKS BUTTON ----------------------------------------------------------------------------------------
