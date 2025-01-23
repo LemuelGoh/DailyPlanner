@@ -35,6 +35,7 @@ function formatDateToYYYYMMDD(dayDisplay) {
     return `${year}-${month}-${day}`;
 }
 
+const weekTasks = [];
 
 // Function to get the start and end dates of the current week
 function getWeekRange(date) {
@@ -50,38 +51,37 @@ function getWeekRange(date) {
 
     console.log(`Week Range: ${formattedStartDate} - ${formattedEndDate}`);
 
-    // Collect all the task data for the entire week
+    // Collect tasks for the entire week
     for (let i = 0; i < 7; i++) {
         const day = new Date(startDate);
         day.setDate(startDate.getDate() + i);  // Get each day in the week
         const formattedDay = day.toLocaleDateString('en-US', options);
         const formattedDate = formatDateToYYYYMMDD(formattedDay);
-        console.log(`Fetching tasks for ${formattedDate}`);
         // Fetch tasks for the current day
-        fetchDayTasks(formattedDate);
+        fetchDayTasks(formattedDate, i);
     }
-
+    
     return `${formattedStartDate} - ${formattedEndDate}`;
 }
 
-// fetchDayTasks("2025-01-23");
-const weekTasks = [];
-
-function fetchDayTasks(selectedDate) {
+// Function to fetch tasks for a specific day
+function fetchDayTasks(selectedDate, index) {
     const email = localStorage.getItem("loggedInUser");
 
     db.collection("tasks").doc(email).collection("tasks").get()
         .then((querySnapshot) => {
-            const dayTasks = [];
+            const dayTasks = []; // Temporary array to store tasks for the current day
+
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const taskDate = new Date(data.date);
                 const dateString = taskDate.toISOString().split('T')[0];
 
-                // 仅获取与 selectedDate 匹配的任务
+                // Only fetch tasks matching the selectedDate
                 if (dateString === selectedDate) {
                     dayTasks.push({
                         uid: doc.id,
+                        date: data.date,
                         title: data.title,
                         time: data.time,
                         priority: data.priority,
@@ -89,10 +89,11 @@ function fetchDayTasks(selectedDate) {
                     });
                 }
             });
-            weekTasks.push({
-                date: selectedDate,
-                tasks: dayTasks
-            })
+
+            // Push the tasks into the weekTasks array at the appropriate index
+
+
+            console.log(`Tasks for ${selectedDate}:`, dayTasks);
         })
         .catch((error) => {
             console.error("Error fetching tasks: ", error);
@@ -375,7 +376,7 @@ weekDisplay.textContent = getWeekRange(currentDate);
 // Initialize the timeline for the current date
 const formattedDate = currentDate.toISOString().split("T")[0];
 
-const dayTasks = tasks.filter(t => (t.date === formattedDate) || (t.date.substring(4) === formattedDate.substring(4) && t.repeat === "yearly") ||
-(t.date.substring(8) === formattedDate.substring(8) && t.repeat === "monthly") ||t.repeat === "daily"); //filter tasks to this day task only
+// const dayTasks = tasks.filter(t => (t.date === formattedDate) || (t.date.substring(4) === formattedDate.substring(4) && t.repeat === "yearly") ||
+// (t.date.substring(8) === formattedDate.substring(8) && t.repeat === "monthly") ||t.repeat === "daily"); //filter tasks to this day task only
 
-generateTimeline(dayTasks);
+generateTimeline(weekTasks);
