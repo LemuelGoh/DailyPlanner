@@ -537,6 +537,10 @@ function addtask() {
                     </select>
                 </div>
                 <div class="setting-option3">
+                    <label for="task-date">End Date:</label>
+                    <input type="date" id="end-reccuring-date" class="task-input" />
+                </div>
+                <div class="setting-option3">
                     <label for="mark-as-done">Mark as Done:</label>
                     <input type="checkbox" id="mark-as-done" />
                 </div>
@@ -564,6 +568,7 @@ function addtask() {
         const reminder = getElementVal('task-reminder');
         const priority = getElementVal('task-priority');
         const recurring = getElementVal('task-recurring');
+        const enddate = getElementVal('end-reccuring-date');
         const markAsDone = document.getElementById('mark-as-done').checked;
         
         const taskData = {
@@ -575,6 +580,7 @@ function addtask() {
             reminder: reminder,
             priority: priority,
             recurring: recurring,
+            enddate: enddate,
             markAsDone: markAsDone,
             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
         };

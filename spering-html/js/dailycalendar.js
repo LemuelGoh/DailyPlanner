@@ -213,13 +213,17 @@ function edittask(taskId) {
                             </select>
                         </div>
                         <div class="setting-option3">
-                            <label for="task-recurring">Task Recurring:</label>
+                        <label for="task-recurring">Task Recurring:</label>
                             <select id="task-recurring" class="task-input">
                                 <option value="0" ${taskData.recurring === '0' ? 'selected' : ''}>None</option>
                                 <option value="1" ${taskData.recurring === '1' ? 'selected' : ''}>Day</option>
                                 <option value="7" ${taskData.recurring === '7' ? 'selected' : ''}>Week</option>
                                 <option value="30" ${taskData.recurring === '30' ? 'selected' : ''}>Month</option>
                             </select>
+                        </div>
+                        <div class="setting-option3">
+                            <label for="task-date">End Date:</label>
+                            <input type="date" id="end-reccuring-date" class="task-input" value="${taskData.enddate || ''}" />
                         </div>
                         <div class="setting-option3">
                             <label for="mark-as-done">Mark as Done:</label>
@@ -249,6 +253,7 @@ function edittask(taskId) {
                     reminder: document.getElementById("task-reminder").value,
                     priority: document.getElementById("task-priority").value,
                     recurring: document.getElementById("task-recurring").value,
+                    enddate: document.getElementById("end-reccuring-date").value,
                     markAsDone: document.getElementById("mark-as-done").checked,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
