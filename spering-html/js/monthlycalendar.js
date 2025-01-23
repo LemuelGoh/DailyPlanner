@@ -90,7 +90,7 @@ function generateMonth(year, month, tasksCountByDate) {
     return monthDiv;
 }
 
-fetchTasks(); // 调用函数以获取任务并生成日历
+fetchTasks();
 
 function generateMonthCalendar(year, month, tasksCountByDate) {
     monthlyCalendarContainer.innerHTML = ""; // Clear old monthly calendar
@@ -100,6 +100,192 @@ function generateMonthCalendar(year, month, tasksCountByDate) {
     addDaysEventListener();
 }
 
+function fetchTasksForMonth(year, month) {
+    const email = localStorage.getItem("loggedInUser");
+
+    db.collection("tasks").doc(email).collection("tasks").get()
+        .then((querySnapshot) => {
+            const tasksCountByDate = {};
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const taskDate = new Date(data.date);
+                if (taskDate.getFullYear() === year && taskDate.getMonth() === month) {
+                    const dateString = taskDate.toISOString().split("T")[0];
+                    if (!tasksCountByDate[dateString]) {
+                        tasksCountByDate[dateString] = 0;
+                    }
+                    tasksCountByDate[dateString]++;
+                }
+            });
+
+            generateMonthCalendar(year, month, tasksCountByDate);
+        })
+        .catch((error) => {
+            console.error("Error fetching tasks for the month: ", error);
+        });
+}
+// ADD TASKS BUTTON ----------------------------------------------------------------------------------------
+document.getElementById("add-tasks-btn").addEventListener("click", function() {
+    const addtaskWidget = document.getElementById("addtask-widget");
+    // Toggle the visibility of the profile widget
+    addtaskWidget.classList.toggle("hide");
+    addtask();
+});
+
+function addtask() {
+    const addtaskWidget = document.getElementById("addtask-widget");
+
+    addtaskWidget.innerHTML = `
+    <div class="task-widget">
+        <p>Add Task:</p>
+        <div class="addtask-container">
+            <div class="left-container" style="width: 60%; padding-right: 20px;">
+                <div class="setting-option4">
+                    <label for="task-title">Title:</label>
+                    <input type="text" id="task-title" class="task-input" placeholder="Enter task title" />
+                </div>
+                <div class="setting-option4">
+                    <label for="task-time">Time:</label>
+                    <input type="time" id="task-time" class="task-input" step="3600" />
+                </div>
+                <div class="setting-option4">
+                    <label for="task-category">Category:</label>
+                    <input type="text" id="task-category" class="task-input" placeholder="Enter task category" />
+                </div>
+                <div class="setting-option4">
+                    <label for="task-description">Description:</label>
+                    <textarea id="task-description" class="task-input" placeholder="Enter task description"></textarea>
+                </div>
+                <div class="setting-option4">
+                    <label for="task-date">Date:</label>
+                    <input type="date" id="task-date" class="task-input" />
+                </div>
+            </div>
+            <div class="right-container2" style="width: 40%;">
+                <div class="setting-option3">
+                    <label for="task-reminder">Reminder:</label>
+                    <select id="task-reminder" class="task-input">
+                        <option value="0">None</option>
+                        <option value="15">15 mins</option>
+                        <option value="30">30 mins</option>
+                        <option value="45">45 mins</option>
+                        <option value="60">60 mins</option>
+                    </select>
+                </div>
+                <div class="setting-option3">
+                    <label for="task-priority">Priority:</label>
+                    <select id="task-priority" class="task-input">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="setting-option3">
+                    <label for="task-recurring">Task Recurring:</label>
+                    <select id="task-recurring" class="task-input">
+                        <option value="0">None</option>
+                        <option value="1">Day</option>
+                        <option value="7">Week</option>
+                        <option value="30">Month</option>
+                    </select>
+                </div>
+                <div class="setting-option3">
+                    <label for="task-date">End Date:</label>
+                    <input type="date" id="end-reccuring-date" class="task-input" />
+                </div>
+                <div class="setting-option3">
+                    <label for="mark-as-done">Mark as Done:</label>
+                    <input type="checkbox" id="mark-as-done" />
+                </div>
+                <div class="setting-option2">
+                    <button id="close-addtask-widget" class="close-button" >Cancel</button>
+                    <button id="save-button" class="close-button">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    document.getElementById("close-addtask-widget").addEventListener("click", function() {
+        const addtaskWidget = document.getElementById("addtask-widget");
+        addtaskWidget.classList.add("hide");
+    });
+
+    document.getElementById("save-button").addEventListener("click", function() {
+        var email = localStorage.getItem("loggedInUser");
+        const title = getElementVal('task-title');
+        const time = getElementVal('task-time');
+        const category = getElementVal('task-category');
+        const description = getElementVal('task-description');
+        const date = getElementVal('task-date');
+        const reminder = getElementVal('task-reminder');
+        const priority = getElementVal('task-priority');
+        const recurring = getElementVal('task-recurring');
+        const enddate = getElementVal('end-reccuring-date');
+        const markAsDone = document.getElementById('mark-as-done').checked;
+        
+        if (!email || !title || !date) {
+            alert("Please fill in all required fields!");
+            return;
+        }
+
+        const taskData = {
+            title: title,
+            time: time,
+            category: category,
+            description: description,
+            date: date,
+            reminder: reminder,
+            priority: priority,
+            recurring: recurring,
+            enddate: enddate,
+            markAsDone: markAsDone,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+        };
+    
+
+        if (recurring > 0 && date && enddate) {
+            let currentDate = new Date(date); // Start date
+            const endRecurringDate = new Date(enddate); // End date
+        
+            // Loop to add recurring tasks until the currentDate exceeds the end date
+            while (currentDate <= endRecurringDate) {
+                // Create a task with the updated date
+                const taskWithDate = {
+                    ...taskData,
+                    date: currentDate.toISOString().split("T")[0], // Format date as YYYY-MM-DD
+                };
+        
+                // Add the task to the database
+                db.collection("tasks").doc(email).collection("tasks").add(taskWithDate)
+                    .catch((error) => console.error("Error adding recurring task: ", error));
+        
+                // Increment the date safely
+                currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + parseInt(recurring));
+            }
+        
+            alert("Recurring tasks added successfully!");
+            setTimeout(() => {
+                fetchTasksForMonth(currentYear, currentMonth); // Call the function after 1 second
+            }, 1500); // 1000ms = 1 second // Fetch tasks for the new month
+        } else {
+            // If no recurring interval is set, add the task once
+            const taskWithDate = { ...taskData, date: date };
+            db.collection("tasks").doc(email).collection("tasks").add(taskWithDate)
+                .then(() => alert("Task added successfully!"))
+                .catch((error) => console.error("Error adding task: ", error));
+            setTimeout(() => {
+                fetchTasksForMonth(currentYear, currentMonth); // Call the function after 1 second
+            }, 1500); // 1000ms = 1 second // Fetch tasks for the new month
+            
+        }
+
+        // Hide the add task widget after saving
+        addtaskWidget.classList.add("hide");
+
+    });
+}
+// ADD TASKS BUTTON ----------------------------------------------------------------------------------------
 
 // Change Month ----------------------------------------------------------------------------------
 function changeMonth(offset) {
@@ -113,8 +299,8 @@ function changeMonth(offset) {
         currentMonth = 11;
         currentYear--;
     }
-    generateMonthCalendar(currentYear, currentMonth, tasksCountByDate);
-    addDaysEventListener();
+
+    fetchTasksForMonth(currentYear, currentMonth); // Fetch tasks for the new month
 }
 
 document.getElementById("prevMonth").addEventListener("click", () => {
