@@ -59,8 +59,8 @@ function fetchDayTasks(selectedDate) {
                         completed: data.markAsDone
                     });
                 }
+                console.log(dayTasks);
             });
-
             generateTimeline(dayTasks);
         })
         .catch((error) => {
