@@ -37,16 +37,16 @@ var db = firebase.firestore(firebase);
     }
   }
 
-  async function showUserDetails(userId) {
+  async function showUserDetails(userID) {
     const userDetails = document.getElementById("user-details");
     userDetails.innerHTML = "<p>Loading...</p>";
   
     try {
-      const userDoc = await db.collection("users").doc(userId).get();
+      const userDoc = await db.collection("users").doc(userID).get();
       if (userDoc.exists) {
         const user = userDoc.data();
         userDetails.innerHTML = `
-          <h3>${user.name || "Unknown"}</h3>
+        
           <p>Email: ${user.email}</p>
           <p>status: ${user.status || "N/A"}</p>
           
@@ -55,8 +55,7 @@ var db = firebase.firestore(firebase);
         userDetails.innerHTML = "<p>User not found.</p>";
       }
     } catch (error) {
-      console.error(":", error);
-      userDetails.innerHTML = "<p></p>";
+      userDetails.innerHTML = "<p>cant load data</p>";
     }
   }
   
@@ -67,11 +66,103 @@ var db = firebase.firestore(firebase);
       .where("isOnline", "==", true) 
       .onSnapshot((snapshot) => {
         const onlineCount = snapshot.size; 
-        document.getElementById("online-users-count").innerText = onlineCount; // 更新页面状态框
-  
+        document.getElementById("online-users-count").innerText = onlineCount; 
       });
   }
+  let feedbackData = [];
+
+  function showEmails(data) {
+    
+    const userDetails = document.getElementById('user-details');
+    userDetails.innerHTML = '<h3>User Emails</h3>';
+    feedbackData.forEach((user) => {
+      const emailItem = document.createElement('div');
+      emailItem.className = 'email-item';
+      emailItem.innerHTML = `<p>${user.email}</p>`;
+      emailItem.addEventListener('click', () => showFeedback(user)); 
+    });
+  }
+
+  async function checkFeedback() {
+    const userDetails = document.getElementById("user-details");
+    const feedbackButton = document.getElementById("feedback-btn");
+  
+    feedbackButton.addEventListener("click", async () => {
+      userDetails.innerHTML = "<h3>Loading Emails...</h3>";
+      feedbackData = []; 
+  
+      try {
+        const querySnapshot = await db.collection("feedback").get();
+        userDetails.innerHTML = "<h3>User Emails</h3>";
+  
+        querySnapshot.forEach((doc) => {
+          const feedback = doc.data();
+          feedbackData.push(feedback); 
+  
+          const emailItem = document.createElement("div");
+          emailItem.className = "email-item";
+          emailItem.innerHTML = `<p>${feedback.email}</p>`;
+          emailItem.addEventListener("click", () => showFeedback(feedback));
+          userDetails.appendChild(emailItem);
+        });
+      } catch (error) {
+        console.error("Error loading feedback:", error);
+        userDetails.innerHTML = "<p>Error loading email data.</p>";
+      }
+    });
+  }
+  
+  function showFeedbackNum() {
+    db.collection("feedback").onSnapshot((snapshot) => {
+      const feedbackCount = snapshot.size; // get feedback
+      document.getElementById("feedback-count").innerText = feedbackCount; 
+    });
+  }
+  
+  function showFeedback(feedback) {
+    const userDetails = document.getElementById("user-details");
+    userDetails.innerHTML = `
+      <h3>User Feedback</h3>
+      <p><strong>Email:</strong> ${feedback. email}</p>
+      <p><strong>Feedback:</strong> ${feedback.feedback}</p>
+      <p><strong>Feedback time:</strong> ${feedback.createdAt.toDate().toLocaleString()}</p>
+      <button id="back-to-emails" class="back-to-emails-btn">Back to Emails</button>
+    `;
+  
+    document
+      .getElementById("back-to-emails")
+      .addEventListener("click", () => {
+        // show J8email
+        userDetails.innerHTML = "<h3>Loading Emails...</h3>";
+  
+        db.collection("feedback")
+          .get()
+          .then((querySnapshot) => {
+            userDetails.innerHTML = "<h3>User Emails</h3>";
+  
+            querySnapshot.forEach((doc) => {
+              const feedback = doc.data();
+  
+              const emailItem = document.createElement("div");
+              emailItem.className = "email-item";
+              emailItem.innerHTML = `<p>${feedback.email}</p>`;
+              emailItem.addEventListener("click", () => showFeedback(feedback));
+              userDetails.appendChild(emailItem);
+            });
+          })
+          .catch((error) => {
+            console.error("Error loading feedback:", error);
+            userDetails.innerHTML = "<p>Error loading email data.</p>";
+          });
+      });
+  }
+  
   
   fetchUsers();
   showUsers();
   showUserDetails();
+  checkFeedback();
+  showEmails(feedbackData);
+  showFeedbackNum();
+  showFeedback();
+
