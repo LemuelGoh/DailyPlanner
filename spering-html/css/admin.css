@@ -116,3 +116,31 @@
       background-color: #0056b3;
     }
     
+    .approve-btn {
+      background-color: #4CAF50; 
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+  
+    .approve-btn:hover {
+      background-color: #45a049; 
+    }
+    
+    .reject-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+    .reject-btn:hover {
+      background-color: #e53935; 
+    }
