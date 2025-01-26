@@ -297,3 +297,11 @@ var db = firebase.firestore(firebase);
   showPendingNum();
   showFeedback();
  
+
+// LOGOUT BUTTON ---------------------------------------------------------------------------------------
+document.getElementById("logout-btn").addEventListener('click', function() {
+  localStorage.clear();
+  console.log("User logged out successfully!");
+  alert("Logged Out Successful")
+  window.location.href = 'index.html';
+});
