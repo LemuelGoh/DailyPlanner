@@ -15,6 +15,13 @@ firebase.initializeApp(firebaseConfig);
 // Reference Firestore Database
 var db = firebase.firestore(firebase);
 
+// LOGOUT BUTTON ---------------------------------------------------------------------------------------
+document.getElementById("logout-btn").addEventListener('click', function() {
+  console.log("User logged out successfully!");
+  alert("Logged Out Successful")
+  window.location.href = 'index.html';
+});
+
   
     async function fetchUsers() {
     const userList = document.getElementById("user-list");
@@ -298,10 +305,3 @@ var db = firebase.firestore(firebase);
   showFeedback();
  
 
-// LOGOUT BUTTON ---------------------------------------------------------------------------------------
-document.getElementById("logout-btn").addEventListener('click', function() {
-  localStorage.clear();
-  console.log("User logged out successfully!");
-  alert("Logged Out Successful")
-  window.location.href = 'index.html';
-});
