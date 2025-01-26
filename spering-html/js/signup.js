@@ -242,19 +242,13 @@ function login(e) {
 
                 // Manually check if the entered password matches the stored password
                 if (password === storedPassword) {
-                    // Store user data in localStorage
-                    localStorage.setItem('loggedInUser', userData.email);
-                    localStorage.setItem('isLoggedIn', 'true');
-                    var test = localStorage.getItem("loggedInUser");
-                    console.log(test);
-                    
                     alert("Log In Successful!")
-
-                    console.log("Login successful!");
                     // Redirect to the desired page after login
                     if (email === "admin") {
                         window.location.href = 'admin.html';
                     } else {
+                        localStorage.setItem('loggedInUser', userData.email);
+                        localStorage.setItem('isLoggedIn', 'true');
                         window.location.href = 'user.html';
                     }
 
