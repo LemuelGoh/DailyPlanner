@@ -20,7 +20,7 @@
   <link href="css/responsive.css" rel="stylesheet" />
   <!-- admin css -->
   <link href="css/admin.css" rel="stylesheet"/>
-
+  
 
 </head>
 
@@ -75,17 +75,18 @@
             </div>
 
             <div class="stats-box">
-              <h4>Pending Matter</h4>
-              <div class="stat-value">3</div>
-              <button>Show</button>
+              <h4>Pending Requests</h4>
+              <h2 id="pending-count">0</h2>
+              <button id="pending-btn" onclick="fetchEmails()">Show</button>
             </div>
+ 
             <div class="stats-box">
               <h4>User Feedback</h4>
-              <div class="stat-value">3</div>
-              <button>Details</button>
+              <h2 id="feedback-count"></h2>
+              <button id="feedback-btn">Details</button>
             </div>
           </div>
-          <div id="user-details" class="user-details-box"></div>
+        <div id="user-details" class="user-Details-Box"></div>
         </div>
       </div>
     </div>
@@ -116,6 +117,7 @@
   <script src="js/custom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
   <script src="js/admin.js"></script>
+>
 
 
 </body>
