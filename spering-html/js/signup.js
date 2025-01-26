@@ -252,7 +252,12 @@ function login(e) {
 
                     console.log("Login successful!");
                     // Redirect to the desired page after login
-                    window.location.href = 'user.html';
+                    if (email === "admin") {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'user.html';
+                    }
+
                 } else {
                     console.log("Invalid password.");
                     alert("Invalid email or password.");
