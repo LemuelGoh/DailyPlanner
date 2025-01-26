@@ -102,7 +102,7 @@ var db = firebase.firestore(firebase);
   
           const emailItem = document.createElement("div");
           emailItem.className = "email-item";
-          emailItem.innerHTML = `<p>${feedback.email}</p>`;
+          emailItem.innerHTML = `<button class="option-button" style="margin-top: 10px">${feedback.email}</button>`;
           emailItem.addEventListener("click", () => showFeedback(feedback));
           userDetails.appendChild(emailItem);
         });
@@ -124,7 +124,7 @@ var db = firebase.firestore(firebase);
     const userDetails = document.getElementById("user-details");
     userDetails.innerHTML = `
       <h3>User Feedback</h3>
-      <p><strong>Email:</strong> ${feedback. email}</p>
+      <p><strong>Email:</strong> ${feedback.email}</p>
       <p><strong>Feedback:</strong> ${feedback.feedback}</p>
       <p><strong>Feedback time:</strong> ${feedback.createdAt.toDate().toLocaleString()}</p>
       <button id="back-to-emails" class="back-to-emails-btn">Back to Emails</button>
@@ -146,7 +146,7 @@ var db = firebase.firestore(firebase);
   
               const emailItem = document.createElement("div");
               emailItem.className = "email-item";
-              emailItem.innerHTML = `<p>${feedback.email}</p>`;
+              emailItem.innerHTML = `<button class="option-button" style="margin-top: 10px">${feedback.email}</button>`;
               emailItem.addEventListener("click", () => showFeedback(feedback));
               userDetails.appendChild(emailItem);
             });
@@ -191,7 +191,7 @@ var db = firebase.firestore(firebase);
         const request = doc.data();
         const emailItem = document.createElement("div");
         emailItem.className = "email-item";
-        emailItem.innerHTML = `<p>${request.email}</p>`;
+        emailItem.innerHTML = `<button class="option-button" style="margin-top: 10px">${request.email}</button>`;
         emailItem.addEventListener("click", () => {
           fetchRollbackRequests(request.email); 
         });
@@ -280,7 +280,7 @@ var db = firebase.firestore(firebase);
         status: "Rejected",
       });
       alert("Rollback request rejected.");
-      fetchRollbackRequests(); // 刷新列表
+      fetchRollbackRequests();
     } catch (error) {
       console.error("Error rejecting rollback:", error);
       alert("Failed to reject rollback.");
