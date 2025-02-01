@@ -385,7 +385,7 @@ function edittask(taskId) {
                         </div>
                         <div class="setting-option3">
                             <label for="task-date">End Date:</label>
-                            <input type="date" id="end-reccuring-date" class="task-input" value="${taskData.enddate || ''}" />
+                            <input type="date" id="end-reccuring-date" class="task-input" value="${taskData.enddate || ''}" disabled />
                         </div>
                         <div class="setting-option3">
                             <label for="mark-as-done">Mark as Done:</label>
