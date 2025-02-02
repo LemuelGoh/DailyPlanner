@@ -349,30 +349,30 @@ function updateUserSetting(email, settingType, value) {
 //     backupWidget.classList.toggle("hide");
 //     fetchBackupData();
 // });
-
-function fetchBackupData() {
-    const backupWidget = document.getElementById("backuprestore-widget");
+// 
+// function fetchBackupData() {
+//     const backupWidget = document.getElementById("backuprestore-widget");
     
-    backupWidget.innerHTML = `
-        <p>Manual Backup and Restore Options</p>
-        <div class="setting-container">
-            <div class="setting-option">
-                <button class="setting-button" id="backup">Backup Now</button>
-            </div>
-            <div class="setting-option">
-                <button class="setting-button" id="backup">Restore Now</button>
-            </div>
-        </div>
-        <div class="profile-header">
-            <button class="close-button" id="close-backuprestore-widget" class="close-btn">✖ Close</button>
-        </div>
-    `;
+//     backupWidget.innerHTML = `
+//         <p>Manual Backup and Restore Options</p>
+//         <div class="setting-container">
+//             <div class="setting-option">
+//                 <button class="setting-button" id="backup">Backup Now</button>
+//             </div>
+//             <div class="setting-option">
+//                 <button class="setting-button" id="backup">Restore Now</button>
+//             </div>
+//         </div>
+//         <div class="profile-header">
+//             <button class="close-button" id="close-backuprestore-widget" class="close-btn">✖ Close</button>
+//         </div>
+//     `;
 
-    document.getElementById("close-backuprestore-widget").addEventListener("click", function() {
-        const backupWidget = document.getElementById("backuprestore-widget");
-        backupWidget.classList.add("hide");
-    });
-}
+//     document.getElementById("close-backuprestore-widget").addEventListener("click", function() {
+//         const backupWidget = document.getElementById("backuprestore-widget");
+//         backupWidget.classList.add("hide");
+//     });
+// }
 // BACKUP BUTTON -------------------------------------------------------------------------
 
 
