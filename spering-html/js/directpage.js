@@ -343,12 +343,12 @@ function updateUserSetting(email, settingType, value) {
 
 
 // BACKUP BUTTON -------------------------------------------------------------------------
-document.getElementById("backup-restore").addEventListener("click", function() {
-    const backupWidget = document.getElementById("backuprestore-widget");
-    // Toggle the visibility of the profile widget
-    backupWidget.classList.toggle("hide");
-    fetchBackupData();
-});
+// document.getElementById("backup-restore").addEventListener("click", function() {
+//     const backupWidget = document.getElementById("backuprestore-widget");
+//     // Toggle the visibility of the profile widget
+//     backupWidget.classList.toggle("hide");
+//     fetchBackupData();
+// });
 
 function fetchBackupData() {
     const backupWidget = document.getElementById("backuprestore-widget");
