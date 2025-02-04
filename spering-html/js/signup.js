@@ -64,6 +64,11 @@ function submitForm(e) {
     var password = getElementVal('register-password'); // Using helper function correctly
     var repassword = getElementVal('re-register-password');
     
+    if (password.length < 8) {
+        alert("Password must be at least 8 characters long.");
+        return; // Stop the function if password is too short
+    }
+    
     if (password !== repassword) {
         alert("Passwords do not match. Please re-enter the passwords.");
         return; // Stop the function if passwords don't match
@@ -439,6 +444,11 @@ document.getElementById("set-newpassword-btn").addEventListener('click', functio
     var email = localStorage.getItem("loggedInUser");
     var newPassword = getElementVal("new-password");
     var renewPassword = getElementVal("re-new-password")
+    
+    if (newPassword.length < 8) {
+        alert("Password must be at least 8 characters long.");
+        return; // Stop the function if password is too short
+    }
 
     if(newPassword !== renewPassword) {
         alert("Passwords do not match. Please re-enter the passwords.");
