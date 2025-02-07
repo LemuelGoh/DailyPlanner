@@ -185,6 +185,24 @@
               </form>
               <!-- END OTP Verification Form -->
 
+              <!-- OTP Verification Form -->
+              <form id="otp-verification-form2" class="hidden">
+                <div class="heading_container login_heading">
+                  <h2>Verify OTP</h2>
+                </div>
+                <div class="form-group">
+                  <label for="otp-input">Enter OTP:</label>
+                  <div class="input-container">
+                    <input type="text" class="form-control" id="otp-input2" placeholder="Enter the OTP sent to your email" required maxlength="6">
+                    <span class="clear-input" onclick="clearInput('otp-input')">&times;</span>
+                  </div>
+                </div>
+
+                <button type="button" class="btn btn-primary">Resend OTP</button>
+                <button type="button" class="btn btn-primary" id="otp-submit-btn2">Verify OTP</button>
+              </form>
+              <!-- END OTP Verification Form -->
+
 
               <!-- FORGET PASSWORD FORM -->
               <form id="forget-password-form" class="hidden">

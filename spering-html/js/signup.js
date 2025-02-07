@@ -29,7 +29,19 @@ function showOTPVerificationForm() {
     document.getElementById('register-form').classList.add('hidden');
     document.getElementById('forget-password-form').classList.add('hidden');
     document.getElementById('password-recovery-form').classList.add('hidden');
+    document.getElementById('otp-verification-form2').classList.add('hidden');
     document.getElementById('otp-verification-form').classList.remove('hidden');
+}
+// END Show OTP form
+
+// Show OTP form
+function showOTPVerificationForm2() {
+    document.getElementById('login-form').classList.add('hidden');
+    document.getElementById('register-form').classList.add('hidden');
+    document.getElementById('forget-password-form').classList.add('hidden');
+    document.getElementById('password-recovery-form').classList.add('hidden');
+    document.getElementById('otp-verification-form').classList.add('hidden');
+    document.getElementById('otp-verification-form2').classList.remove('hidden');
 }
 // END Show OTP form
 
@@ -39,6 +51,7 @@ function showPasswordRecoveryForm() {
     document.getElementById('register-form').classList.add('hidden');
     document.getElementById('forget-password-form').classList.add('hidden');
     document.getElementById('otp-verification-form').classList.add('hidden');
+    document.getElementById('otp-verification-form').classList.remove('hidden');
     document.getElementById('password-recovery-form').classList.remove('hidden');
 }
 // END Show OTP form
@@ -221,7 +234,15 @@ document.getElementById('otp-submit-btn').addEventListener('click', function (e)
 });
 //GET OTP
 // ----------------------------------------------------------------------------------------
-
+document.getElementById('otp-submit-btn2').addEventListener('click', function (e) {
+    e.preventDefault();
+    
+    // Get email and inputOTP from your form or context
+    var email = getElementVal('email');
+    const inputOTP = getElementVal('otp-input2');
+    // Call the verifyOTP function with the correct arguments
+    verifyOTP(email, inputOTP);
+});
 
 // ----------------------------------------------------------------------------------------
 // LOGIN
@@ -249,7 +270,21 @@ function login(e) {
                 const doc = querySnapshot.docs[0];
                 const userData = doc.data();
                 const storedPassword = userData.password; // Assuming password is stored in plaintext (NOTE: should hash passwords in real apps)
-
+                const status = userData.status;
+                if (status === "Not Activated") {
+                    alert("Please activate your account first.");
+                    const otp = generateOTP(); // Generate the OTP
+                    const expirationTime = firebase.firestore.Timestamp.fromMillis(Date.now() + 10 * 60 * 1000);
+                    console.log(otp)
+                    db.collection("users").doc(doc.id).update({
+                        otp: otp,
+                        otpExpirationTime: expirationTime,
+                        otpGeneratedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    })
+                    showOTPVerificationForm2();
+                    sendMail(email,otp);
+                    return;
+                }
                 // Manually check if the entered password matches the stored password
                 if (password === storedPassword) {
                     alert("Log In Successful!")
