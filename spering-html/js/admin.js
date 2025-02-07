@@ -82,6 +82,7 @@ document.getElementById("logout-btn").addEventListener('click', function() {
             .then(() => {
                 alert("User deleted successfully.");
                 document.getElementById("user-details").innerHTML = "<p>User has been removed.</p>";
+                fetchUsers();
             })
             .catch((error) => {
                 console.error("Error deleting user: ", error);
@@ -194,19 +195,6 @@ document.getElementById("logout-btn").addEventListener('click', function() {
     });
   }
   
-  async function requestRollback(userEmail) {
-    try {
-      await db.collection("requestrolll").add({
-        email: userEmail,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        status: "Pending",
-      });
-      alert("Roll back request submitted!");
-    } catch (error) {
-      console.error("Error requesting roll back:", error);
-      alert("Failed to submit roll back request.");
-    }
-  }
   
   async function fetchEmails() {
     const userDetails = document.getElementById("user-details");
@@ -306,8 +294,8 @@ document.getElementById("logout-btn").addEventListener('click', function() {
     }
       
       await db.collection("requestrolll").doc(requestId).delete();
-  
       alert("User deletion approved and request removed successfully.");
+      fetchDeleteRequests();
     } catch (error) {
         console.error("Error during approval and deletion:", error);
         alert("Failed to approve deletion.");
@@ -322,6 +310,7 @@ document.getElementById("logout-btn").addEventListener('click', function() {
         status: "Rejected",
       });
       alert("Delete request rejected.");
+      await db.collection("requestrolll").doc(requestId).delete();
       fetchDeleteRequests();
     } catch (error) {
       console.error("Error rejecting rollback:", error);

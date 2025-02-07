@@ -468,7 +468,9 @@ document.getElementById("logout-btn").addEventListener('click', function() {
     alert("Logged Out Successful")
     window.location.href = 'index.html';
 });
+// LOGOUT BUTTON ----------------------------------------------------------------------------------------
 
+// DELETE ACCOUNT BUTTON ----------------------------------------------------------------------------------------
 document.getElementById("delete-account").addEventListener("click", function () {
     var email = localStorage.getItem("loggedInUser");
 
@@ -492,7 +494,7 @@ document.getElementById("delete-account").addEventListener("click", function () 
                 if (confirmDelete) {
                     db.collection("requestrolll").add({
                         email: email,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        requestdata: firebase.firestore.FieldValue.serverTimestamp(),
                         status: "Pending",
                     }).then(() => {
                         alert("Delete request submitted!");
@@ -508,4 +510,4 @@ document.getElementById("delete-account").addEventListener("click", function () 
             alert("Failed to check existing requests. Please try again.");
         });
 });
-
+// DELETE ACCOUNT BUTTON ----------------------------------------------------------------------------------------

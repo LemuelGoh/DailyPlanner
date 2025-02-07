@@ -235,6 +235,11 @@ function login(e) {
         alert("Please enter both email and password.");
         return; // Stop further execution if fields are empty
     }
+    if (email === "admin") {
+        if (password === "admin") {
+            window.location.href = 'admin.html';
+            alert("Log In Successful!")
+    }}
 
     // Query Firestore for the user by email
     db.collection("users").where("email", "==", email).get()
@@ -249,13 +254,9 @@ function login(e) {
                 if (password === storedPassword) {
                     alert("Log In Successful!")
                     // Redirect to the desired page after login
-                    if (email === "admin") {
-                        window.location.href = 'admin.html';
-                    } else {
                         localStorage.setItem('loggedInUser', userData.email);
                         localStorage.setItem('isLoggedIn', 'true');
                         window.location.href = 'user.html';
-                    }
 
                 } else {
                     console.log("Invalid password.");
