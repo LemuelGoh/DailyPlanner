@@ -57,8 +57,14 @@ document.getElementById("logout-btn").addEventListener('click', function() {
         
           <p>Email: ${user.email}</p>
           <p>status: ${user.status || "N/A"}</p>
+          <button class="option-button" id="delete-user-button">Delete User</button>
           
         `;
+
+        document.getElementById("delete-user-button").addEventListener("click", function () {
+          deleteUser(userID);
+        });
+
       } else {
         userDetails.innerHTML = "<p>User not found.</p>";
       }
@@ -67,6 +73,22 @@ document.getElementById("logout-btn").addEventListener('click', function() {
     }
   }
   
+  // Function to delete user from Firestore
+  function deleteUser(userID) {
+    const confirmDelete = confirm("Are you sure you want to delete this user?");
+    console.log(userID);
+    if (confirmDelete) {
+        db.collection("users").doc(userID).delete()
+            .then(() => {
+                alert("User deleted successfully.");
+                document.getElementById("user-details").innerHTML = "<p>User has been removed.</p>";
+            })
+            .catch((error) => {
+                console.error("Error deleting user: ", error);
+                alert("Failed to delete the user. Please try again.");
+            });
+    }
+  }
 
   function showUsers() {
     
@@ -200,7 +222,7 @@ document.getElementById("logout-btn").addEventListener('click', function() {
         emailItem.className = "email-item";
         emailItem.innerHTML = `<button class="option-button" style="margin-top: 10px">${request.email}</button>`;
         emailItem.addEventListener("click", () => {
-          fetchRollbackRequests(request.email); 
+          fetchDeleteRequests(request.email); 
         });
         userDetails.appendChild(emailItem);
       });
@@ -210,13 +232,13 @@ document.getElementById("logout-btn").addEventListener('click', function() {
     }
   }
   
-  async function fetchRollbackRequests(userEmail) {
+  async function fetchDeleteRequests(userEmail) {
     const userDetails = document.getElementById("user-details");
     userDetails.innerHTML = "<p>Loading...</p>";
   
     try {
       const querySnapshot = await db.collection("requestrolll").where("email", "==", userEmail).get();
-      userDetails.innerHTML = "<h3>Pending Requests</h3>";
+      userDetails.innerHTML = "<h3>Requests for Delete</h3>";
   
       querySnapshot.forEach((doc) => {
         const request = doc.data();
@@ -226,8 +248,8 @@ document.getElementById("logout-btn").addEventListener('click', function() {
           <p>Email: ${request.email}</p>
           <p>Status: ${request.status}</p>
           <p><strong>Request time:</strong> ${request.requestdata.toDate().toLocaleString()}</p>
-          <button onclick="approveRollback('${doc.id}', '${request.email}')" class="approve-btn">Approve</button>
-          <button onclick="rejectRollback('${doc.id}')" class="reject-btn">Reject</button>
+          <button onclick="approveDelete('${doc.id}', '${request.email}')" class="approve-btn">Approve</button>
+          <button onclick="rejectDelete('${doc.id}')" class="reject-btn">Reject</button>
           <button id="back-to-emails" class="back-to-emails-btn">Back to Emails</button>
         `;
   
@@ -258,36 +280,49 @@ document.getElementById("logout-btn").addEventListener('click', function() {
   
   
   
-  async function approveRollback(requestId, userEmail) {
+  async function approveDelete(requestId, userEmail) {
     try {
-      const backupDoc = await db.collection("backup").doc(userEmail).get();
-      if (!backupDoc.exists) {
-        alert(`Backup data for ${userEmail} not found.`);
-        return;
-      }
-  
-      const backupData = backupDoc.data();
-  
-      await db.collection("profile").doc(userEmail).set(backupData);
-      await db.collection("requestrolll").doc(requestId).update({
-        status: "Approved",
-      });
-  
-      alert("Rollback successful!");
+      const confirmDelete = confirm("Are you sure you want to delete this user?");
+      if (!confirmDelete) return;
+      try {
+        const usersRef = db.collection("users");
+        const querySnapshot = await usersRef.where("email", "==", userEmail).get();
+
+        if (querySnapshot.empty) {
+            alert("No user found with this email.");
+            return;
+        }
+
+        // Delete the matched user documents
+        querySnapshot.forEach(async (doc) => {
+            await usersRef.doc(doc.id).delete();
+        });
+
+        alert("User deleted successfully.");
+        document.getElementById("user-details").innerHTML = "<p>User has been removed.</p>";
     } catch (error) {
-      console.error("Error during rollback:", error);
-      alert("Failed to approve rollback.");
+        console.error("Error deleting user:", error);
+        alert("Failed to delete the user. Please try again.");
     }
-  }
+      
+      await db.collection("requestrolll").doc(requestId).delete();
+  
+      alert("User deletion approved and request removed successfully.");
+    } catch (error) {
+        console.error("Error during approval and deletion:", error);
+        alert("Failed to approve deletion.");
+    }
+    }
   
   
-  async function rejectRollback(requestId) {
+  
+  async function rejectDelete(requestId) {
     try {
       await db.collection("requestrolll").doc(requestId).update({
         status: "Rejected",
       });
-      alert("Rollback request rejected.");
-      fetchRollbackRequests();
+      alert("Delete request rejected.");
+      fetchDeleteRequests();
     } catch (error) {
       console.error("Error rejecting rollback:", error);
       alert("Failed to reject rollback.");

@@ -469,4 +469,43 @@ document.getElementById("logout-btn").addEventListener('click', function() {
     window.location.href = 'index.html';
 });
 
+document.getElementById("delete-account").addEventListener("click", function () {
+    var email = localStorage.getItem("loggedInUser");
+
+    if (!email) {
+        alert("No logged-in user found.");
+        return;
+    }
+
+    // Check if there's an existing request with "Pending" status
+    db.collection("requestrolll")
+        .where("email", "==", email)
+        .where("status", "==", "Pending")
+        .get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                alert("You have already submitted a delete request. Please wait for approval.");
+            } else {
+                // Proceed with deletion request if no pending request exists
+                const confirmDelete = confirm("Are you sure you want to request account deletion? This action cannot be undone.");
+
+                if (confirmDelete) {
+                    db.collection("requestrolll").add({
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: "Pending",
+                    }).then(() => {
+                        alert("Delete request submitted!");
+                    }).catch((error) => {
+                        console.error("Error submitting delete request: ", error);
+                        alert("Error submitting delete request.");
+                    });
+                }
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking delete request: ", error);
+            alert("Failed to check existing requests. Please try again.");
+        });
+});
 
