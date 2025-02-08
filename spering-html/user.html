@@ -23,11 +23,9 @@
   <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
   <script type="module">
-    // 使用 ES6 模块导入 Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
-    // Firebase 配置
     const firebaseConfig = {
       apiKey: "AIzaSyDvQKch6kMq9J8KffpuiogfDoaOUAk8aWo",
       authDomain: "planlah-16aef.firebaseapp.com",
@@ -41,7 +39,7 @@
 
 <body class="sub_page">
   <div class="hero_area">
-    <!-- header section strats -->
+    <!-- header section stars -->
     <header class="header_section">
       <div class="container-fluid">
         <nav class="navbar navbar-expand-lg custom_nav-container">
@@ -115,7 +113,7 @@
             <li>Time blocking</li>
             <li>Habit tracker</li>
           </ul>
-          <button class="btn">Choose Plan</button>
+          <button class="btn" id="subscribe-normal">Choose Plan</button>
         </div>
         <div class="pricing-card">
           <h3>Premium Plan</h3>
@@ -126,7 +124,7 @@
             <li>Customizable layouts</li>
             <li>Priority support</li>
           </ul>
-          <button class="btn">Choose Plan</button>
+          <button class="btn" id="subscribe-premium">Choose Plan</button>
         </div>
       </div>
     </div>

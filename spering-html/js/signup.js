@@ -271,22 +271,22 @@ function login(e) {
                 const userData = doc.data();
                 const storedPassword = userData.password; // Assuming password is stored in plaintext (NOTE: should hash passwords in real apps)
                 const status = userData.status;
-                if (status === "Not Activated") {
-                    alert("Please activate your account first.");
-                    const otp = generateOTP(); // Generate the OTP
-                    const expirationTime = firebase.firestore.Timestamp.fromMillis(Date.now() + 10 * 60 * 1000);
-                    console.log(otp)
-                    db.collection("users").doc(doc.id).update({
-                        otp: otp,
-                        otpExpirationTime: expirationTime,
-                        otpGeneratedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    })
-                    showOTPVerificationForm2();
-                    sendMail(email,otp);
-                    return;
-                }
                 // Manually check if the entered password matches the stored password
                 if (password === storedPassword) {
+                    if (status === "Not Activated") {
+                        alert("Please activate your account first.");
+                        const otp = generateOTP(); // Generate the OTP
+                        const expirationTime = firebase.firestore.Timestamp.fromMillis(Date.now() + 10 * 60 * 1000);
+                        console.log(otp)
+                        db.collection("users").doc(doc.id).update({
+                            otp: otp,
+                            otpExpirationTime: expirationTime,
+                            otpGeneratedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        })
+                        showOTPVerificationForm2();
+                        sendMail(email,otp);
+                        return;
+                    }
                     alert("Log In Successful!")
                     // Redirect to the desired page after login
                         localStorage.setItem('loggedInUser', userData.email);

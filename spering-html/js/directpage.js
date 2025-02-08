@@ -511,3 +511,75 @@ document.getElementById("delete-account").addEventListener("click", function () 
         });
 });
 // DELETE ACCOUNT BUTTON ----------------------------------------------------------------------------------------
+
+
+document.getElementById("subscribe-premium").addEventListener("click", async function() {
+    const email = localStorage.getItem("loggedInUser"); // Get logged-in user email
+
+    if (!email) {
+        alert("No logged-in user found.");
+        return;
+    }
+
+    try {
+        // Find the user's document in Firestore
+        const userRef = db.collection("users").where("email", "==", email);
+        const userSnapshot = await userRef.get();
+
+        if (!userSnapshot.empty) {
+            const userDoc = userSnapshot.docs[0]; // Get the first document
+            const userData = userDoc.data(); // Get user data
+            // Check if the user is already premium
+            if (userData.isPremium) {
+                alert("You are already a premium user!");
+                return; // Exit function
+            }
+            
+            await userDoc.ref.update({ isPremium: true }); // Update the field
+            alert("You are now a premium user!");
+            window.location.reload(); // Refresh to apply changes
+        } else {
+            alert("User not found in database.");
+        }
+    } catch (error) {
+        console.error("Error updating premium status:", error);
+        alert("Failed to upgrade to premium. Please try again.");
+    }
+});
+
+document.getElementById("subscribe-normal").addEventListener("click", async function() {
+    const email = localStorage.getItem("loggedInUser"); // Get logged-in user email
+
+    if (!email) {
+        alert("No logged-in user found.");
+        return;
+    }
+
+    try {
+        // Find the user's document in Firestore
+        const userRef = db.collection("users").where("email", "==", email);
+        const userSnapshot = await userRef.get();
+
+        if (!userSnapshot.empty) {
+            const userDoc = userSnapshot.docs[0]; // Get the first document
+            const userData = userDoc.data(); // Get user data
+
+            // Check if the user is already a normal user
+            if (!userData.isPremium) {
+                alert("You are already a normal user!");
+                return; // Exit function
+            }
+
+            // Update user to normal (isPremium: false)
+            await userDoc.ref.update({ isPremium: false });
+
+            alert("You have switched back to a normal user.");
+            window.location.reload(); // Refresh to apply changes
+        } else {
+            alert("User not found in database.");
+        }
+    } catch (error) {
+        console.error("Error updating premium status:", error);
+        alert("Failed to switch to normal user. Please try again.");
+    }
+});

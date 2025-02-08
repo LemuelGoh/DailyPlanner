@@ -132,7 +132,7 @@ document.getElementById("add-tasks-btn").addEventListener("click", function() {
     addtask();
 });
 
-function addtask() {
+async function addtask() {
     const addtaskWidget = document.getElementById("addtask-widget");
 
     addtaskWidget.innerHTML = `
@@ -164,7 +164,7 @@ function addtask() {
             <div class="right-container2" style="width: 40%;">
                 <div class="setting-option3">
                     <label for="task-reminder">Reminder:</label>
-                    <select id="task-reminder" class="task-input">
+                    <select id="task-reminder" class="task-input premium-feature">
                         <option value="0">None</option>
                         <option value="15">15 mins</option>
                         <option value="30">30 mins</option>
@@ -174,7 +174,7 @@ function addtask() {
                 </div>
                 <div class="setting-option3">
                     <label for="task-priority">Priority:</label>
-                    <select id="task-priority" class="task-input">
+                    <select id="task-priority" class="task-input premium-feature">
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
@@ -182,7 +182,7 @@ function addtask() {
                 </div>
                 <div class="setting-option3">
                     <label for="task-recurring">Task Recurring:</label>
-                    <select id="task-recurring" class="task-input">
+                    <select id="task-recurring" class="task-input premium-feature">
                         <option value="0">None</option>
                         <option value="1">Day</option>
                         <option value="7">Week</option>
@@ -191,20 +191,50 @@ function addtask() {
                 </div>
                 <div class="setting-option3">
                     <label for="task-date">End Date:</label>
-                    <input type="date" id="end-reccuring-date" class="task-input" />
+                    <input type="date" id="end-reccuring-date" class="task-input premium-feature" />
                 </div>
                 <div class="setting-option3">
                     <label for="mark-as-done">Mark as Done:</label>
                     <input type="checkbox" id="mark-as-done" />
                 </div>
                 <div class="setting-option2">
-                    <button id="close-addtask-widget" class="close-button" >Cancel</button>
+                    <button id="close-addtask-widget" class="close-button">Cancel</button>
                     <button id="save-button" class="close-button">Save</button>
                 </div>
             </div>
         </div>
     </div>
     `;
+
+    var email = localStorage.getItem("loggedInUser");
+
+    if (email) {
+        try {
+            // Retrieve user details (MUST use await)
+            const userSnapshot = await db.collection("users").where("email", "==", email).get();
+            
+            if (!userSnapshot.empty) {
+                const userData = userSnapshot.docs[0].data();
+                const isPremium = userData.isPremium || false;
+                console.log("User is premium: ", isPremium);
+    
+                // Disable premium features if user is not premium
+                if (!isPremium) {
+                    document.querySelectorAll(".premium-feature").forEach((element) => {
+                        element.disabled = true;
+                        element.title = "Upgrade to premium to use this feature!";
+                    });
+                }
+            } else {
+                console.error("User not found in Firestore.");
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    } else {
+        console.error("No logged-in user found.");
+    }
+    
 
     document.getElementById("close-addtask-widget").addEventListener("click", function() {
         const addtaskWidget = document.getElementById("addtask-widget");
