@@ -57,6 +57,7 @@ document.getElementById("logout-btn").addEventListener('click', function() {
         
           <p>Email: ${user.email}</p>
           <p>status: ${user.status || "N/A"}</p>
+          <p>Premium: ${user.isPremium || "false"}</p>
           <button class="option-button" id="delete-user-button">Delete User</button>
           
         `;
