@@ -18,8 +18,9 @@
   <link href="css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
-  <!-- admin css -->
-  <link href="css/admin.css" rel="stylesheet"/>
+  <!-- feedback css -->
+  <link href="css/feedback.css" rel="stylesheet"/>
+
   
 
 </head>
@@ -45,17 +46,18 @@
   <section class="top-options">
     <div class="container-fluid">
         <div class="top-options-content">
-            <button class="option-button" id="logout-btn">
-                <span class="icon">🔒</span> Logout
+            <button class="option-button" id="goback-btn">
+                <span class="icon">🔒</span> Go Back
             </button>
         </div>
     </div>
   </section>
   <!------------->
 
-  
+  <div class="main-container">
+    <div id="all-feedback-container"></div> 
+  </div>
 
-  
   <!-- footer section -->
   <footer class="container-fluid footer_section ">
     <div class="container">
@@ -67,15 +69,11 @@
   </footer>
   <!-- end  footer section -->
 
-
   <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bootstrap.js"></script>
   <script src="js/custom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
-  <script src="js/admin.js"></script>
->
-
-
+  <script src="js/feedback.js"></script>
 </body>
 
 </html>
