@@ -7,114 +7,46 @@ body {
     color: #333;
   }
   
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  
-  .header_section {
-    background-color: #005f73;
-    padding: 10px 0;
-    color: white;
-  }
-  
-  .navbar-brand {
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-  }
-  
-  .navbar-brand img {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-  }
-  
-  .navbar-brand span {
-    font-size: 24px;
-  }
-  
-  .navbar-nav {
-    margin-left: auto;
-  }
-  
-  .top-options {
-    background-color: #e9ecef;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .top-options-content {
-    text-align: right;
-  }
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.main-container {
+  padding: 30px 15px;
+}
+
+#all-feedback-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.feedback-item {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feedback-item h4 {
+  font-size: 18px;
+  color: #005f73;
+  font-weight: bold;
+}
+
+.feedback-item p {
+  font-size: 16px;
+  color: #6c757d;
+}
   
 
-  .main-container {
-    padding: 30px 15px;
-  }
   
-  #all-feedback-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+
   
-  .feedback-item {
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+
   
-  .feedback-item h4 {
-    font-size: 18px;
-    color: #005f73;
-    font-weight: bold;
-  }
-  
-  .feedback-item p {
-    font-size: 16px;
-    color: #6c757d;
-  }
-  
-  .checkAllBtn {
-    align-self: flex-start;
-    background-color: #005f73;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .checkAllBtn:hover {
-    background-color: #008C75;
-  }
-  
-  .footer_section {
-    background-color: #005f73;
-    padding: 15px;
-    color: white;
-    text-align: center;
-  }
-  
-  .footer_section a {
-    color: #ffdd57;
-    font-weight: bold;
-  }
-  
-  .footer_section a:hover {
-    color: #ffffff;
-    text-decoration: underline;
-  }
-  
+

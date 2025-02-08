@@ -32,7 +32,7 @@ const firebaseConfig = {
           <div class="detail-box">
             <h4>${data.email}</h4>
             <p>${data.feedback}</p>
-            <button class="checkAllBtn">Check All</button>
+            <button class="option-button checkAllBtn">Check All</button>
           </div>
         `;
   
