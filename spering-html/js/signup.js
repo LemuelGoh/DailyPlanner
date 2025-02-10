@@ -63,9 +63,9 @@ function sendMail(email, otp){
         to_name : (email),
         OTP : (otp)
     }
-    // emailjs.send("service_es85yey", "template_g35cvdm", params).then(function(res){
-    //     alert("OTP is succesful delivery!")
-    // })
+    emailjs.send("service_es85yey", "template_g35cvdm", params).then(function(res){
+        alert("OTP is succesful delivery!")
+    })
 }
 // END SendMail()
 
