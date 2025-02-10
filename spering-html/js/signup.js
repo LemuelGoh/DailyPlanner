@@ -51,7 +51,7 @@ function showPasswordRecoveryForm() {
     document.getElementById('register-form').classList.add('hidden');
     document.getElementById('forget-password-form').classList.add('hidden');
     document.getElementById('otp-verification-form').classList.add('hidden');
-    document.getElementById('otp-verification-form').classList.remove('hidden');
+    document.getElementById('otp-verification-form2').classList.add('hidden');
     document.getElementById('password-recovery-form').classList.remove('hidden');
 }
 // END Show OTP form
