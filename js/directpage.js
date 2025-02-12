@@ -436,28 +436,37 @@ function fetchFeedbackData() {
     </div>
     `;
 
-    document.getElementById("close-feedback-widget").addEventListener("click", function() {
-        const feedbackWidget = document.getElementById("feedback-widget");
-        feedbackWidget.classList.add("hide");
-    });
-
-    document.getElementById("submit-feedback").addEventListener("click", function() {
+    document.getElementById("submit-feedback").addEventListener("click", function () {
         var email = localStorage.getItem("loggedInUser");
         const feedback = getElementVal('feedback-input');
-
+    
+        // Log the feedback for debugging
+        console.log("Submitting feedback:", feedback);
+    
         db.collection("feedback").add({
             email: email,
             feedback: feedback,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-            alert("Feedback Submitted Successfully");
-            fetchFeedbackData();
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            repliesCount: 0 // 初始化回复数量
+        }).then((docRef) => {
+            // Ensure docRef is valid
+            if (docRef && docRef.id) {
+                const fbID = docRef.id; // 获取 Firebase 自动生成的文档 ID（fbID）
+                alert("Feedback Submitted Successfully with ID: " + fbID);
+                console.log("Feedback ID: ", fbID); // Log the feedback ID
+                fetchFeedbackData(); // 重新加载反馈
+            } else {
+                console.error("Failed to get docRef ID");
+                alert("Error submitting feedback: No ID returned");
+            }
         }).catch((error) => {
             console.error("Error submitting feedback: ", error);
             alert("Error submitting feedback.");
         });
     });
 }
+
+
 // FEEDBACK SUBMISSION BUTTON -------------------------------------------------------------------------
 
 

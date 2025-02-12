@@ -47,7 +47,7 @@
   gap: 10px;
 }
 
-.like-btn, .reply-btn {
+.like-btn, .reply-btn,.show-btn {
   background-color: #007BFF; /* Blue buttons */
   color: white;
   border: none;

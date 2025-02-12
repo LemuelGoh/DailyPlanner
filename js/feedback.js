@@ -57,82 +57,144 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 // ✅ Improved Feedback Display for `helpdesk.html` or other pages
 document.addEventListener("DOMContentLoaded", async function () {
-  const allFeedbackContainer = document.getElementById("all-feedback-container");
+    const allFeedbackContainer = document.getElementById("all-feedback-container");
 
-  if (allFeedbackContainer) {
-      try {
-          const querySnapshot = await db.collection("feedback").get();
+    if (allFeedbackContainer) {
+        try {
+            const querySnapshot = await db.collection("feedback").get();
 
-          querySnapshot.forEach((doc) => {
-              const data = doc.data();
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const fbID = doc.id; // 获取反馈文档的唯一 ID
 
-              const feedbackItem = document.createElement("div");
-              feedbackItem.classList.add("feedback-item");
+                const feedbackItem = document.createElement("div");
+                feedbackItem.classList.add("feedback-item");
 
-              feedbackItem.innerHTML = `
-                  <div class="feedback-header">
-                      <img src="images/6522516.png" class="feedback-avatar" alt="User">
-                      <div class="user-info">
-                          <h4>${data.email}</h4>
-                          <span class="feedback-date">${new Date().toLocaleDateString()}</span>
-                      </div>
-                  </div>
-                  <p class="feedback-text">${data.feedback}</p>
-                  <div class="feedback-actions">
-                      <button class="like-btn">👍 Like <span class="like-count">0</span></button>
-                      <button class="reply-btn option-button">💬 Reply</button>
-                  </div>
-                  <div class="reply-section" style="display: none;">
-                      <textarea class="reply-input" placeholder="Write a reply..."></textarea>
-                      <button class="submit-reply">Send</button>
-                  </div>
-              `;
+                feedbackItem.innerHTML = `
+                <div class="feedback-header">
+                    <h4>${data.email}</h4>
+                    <span class="feedback-date">${new Date().toLocaleDateString()}</span>
+                </div>
+                <p class="feedback-text">${data.feedback}</p>
+                <div class="feedback-actions">
+                    <button class="like-btn">👍 Like <span class="like-count">0</span></button>
+                    <button class="reply-btn option-button">💬 Reply</button>
+                </div>
+                <div class="reply-section" style="display: none;">
+                    <textarea class="reply-input" placeholder="Write a reply..."></textarea>
+                    <button class="submit-reply" fbID="${doc.id}">Send</button>
+                </div>
+                <button class="show-btn" data-fbID="${doc.id}">Show Replies</button>
+                <div id="replies-container-${doc.id}" class="replies-container" style="display: none;"></div>
+            `;
 
-              allFeedbackContainer.appendChild(feedbackItem);
-          });
 
-          // Activate interactions
-          activateInteraction();
 
-      } catch (error) {
-          console.error("Error loading feedback: ", error);
-      }
-  }
+                allFeedbackContainer.appendChild(feedbackItem);
+            });
+
+            // 激活交互功能
+            activateInteraction();
+
+        } catch (error) {
+            console.error("Error loading feedback: ", error);
+        }
+    }
 });
 
-// ✅ Function to enable Like & Reply Features
 function activateInteraction() {
-  const likeButtons = document.querySelectorAll(".like-btn");
-  const replyButtons = document.querySelectorAll(".reply-btn");
-  const submitReplyButtons = document.querySelectorAll(".submit-reply");
+    // 显示和隐藏回复输入框
+    document.querySelectorAll(".reply-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let replySection = this.parentElement.nextElementSibling;
+            replySection.style.display = replySection.style.display === "flex" ? "none" : "flex";
+        });
+    });
 
-  // Like Button Click Event
-  likeButtons.forEach(button => {
-      button.addEventListener("click", function () {
-          let count = this.querySelector(".like-count");
-          count.textContent = parseInt(count.textContent) + 1;
-      });
-  });
+    // 提交回复并更新 Firestore
+    document.querySelectorAll(".submit-reply").forEach(button => {
+        button.addEventListener("click", async function () {
+            let replyInput = this.previousElementSibling;
+            let feedbackId = this.getAttribute("fbID");
 
-  // Reply Button Click Event
-  replyButtons.forEach(button => {
-      button.addEventListener("click", function () {
-          let replySection = this.parentElement.nextElementSibling;
-          replySection.style.display = replySection.style.display === "flex" ? "none" : "flex";
-      });
-  });
+            if (replyInput.value.trim() !== "") {
+                let replyText = replyInput.value;
 
-  // Submit Reply
-  submitReplyButtons.forEach(button => {
-      button.addEventListener("click", function () {
-          let replyInput = this.previousElementSibling;
-          if (replyInput.value.trim() !== "") {
-              alert("Reply Sent: " + replyInput.value);
-              replyInput.value = "";
-          }
-      });
-  });
+                try {
+                    // 将回复添加到单独的 `replies` 集合
+                    await db.collection("replies").add({
+                        feedbackId: feedbackId,
+                        replyText: replyText,
+                        repliedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        email: localStorage.getItem("loggedInUser")
+                    });
+
+                    // 更新 `feedback` 文档中的 `repliesCount`
+                    await db.collection("feedback").doc(feedbackId).update({
+                        repliesCount: firebase.firestore.FieldValue.increment(1)
+                    });
+
+                    alert("Reply Sent: " + replyText);
+                    replyInput.value = ""; // 清空输入框
+                } catch (error) {
+                    console.error("Error sending reply: ", error);
+                    alert("Error submitting reply.");
+                }
+            } else {
+                alert("Reply cannot be empty!");
+            }
+        });
+    });
+
+    // 点击 "Show Replies" 按钮时显示回复
+    document.querySelectorAll(".show-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let fbID = this.getAttribute("data-fbID");
+            let repliesContainer = document.getElementById(`replies-container-${fbID}`);
+            repliesContainer.style.display = "block";  // 显示回复容器
+            displayReplies(fbID); // 调用显示回复的函数
+        });
+    });
 }
+
+
+// 获取并显示该反馈的所有回复
+async function displayReplies(fbID) {
+    const repliesContainer = document.getElementById(`replies-container-${fbID}`);
+    repliesContainer.innerHTML = "";  // 清空现有的回复内容
+
+    console.log("Fetching replies for feedback ID:", fbID);
+
+    try {
+        const repliesSnapshot = await db.collection("replies")
+            .where("feedbackId", "==", fbID)
+            .orderBy("repliedAt", "asc")
+            .get();
+
+        console.log("Replies found:", repliesSnapshot.size);
+
+        repliesSnapshot.forEach((doc) => {
+            const replyData = doc.data();
+            const replyText = replyData.replyText;
+            const repliedAt = new Date(replyData.repliedAt.seconds * 1000).toLocaleString();
+
+            console.log("Reply:", replyText, "Replied at:", repliedAt);
+
+            repliesContainer.innerHTML += `
+                <div class="reply-item">
+                    <p><strong>${replyText}:</strong></p>
+                    <p><em>Replied at: ${repliedAt}</em></p>
+                </div>
+            `;
+        });
+    } catch (error) {
+        console.error("Error fetching replies:", error);
+    }
+}
+
+
+
+
 
 // ✅ Ensure "Go Back" button only works if it exists
 document.addEventListener("DOMContentLoaded", function () {
@@ -143,3 +205,4 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 });
+
