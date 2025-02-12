@@ -93,7 +93,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 allFeedbackContainer.appendChild(feedbackItem);
             });
 
-            // 激活交互功能
             activateInteraction();
 
         } catch (error) {
@@ -103,7 +102,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 function activateInteraction() {
-    // 显示和隐藏回复输入框
     document.querySelectorAll(".reply-btn").forEach(button => {
         button.addEventListener("click", function () {
             let replySection = this.parentElement.nextElementSibling;
@@ -111,7 +109,6 @@ function activateInteraction() {
         });
     });
 
-    // 提交回复并更新 Firestore
     document.querySelectorAll(".submit-reply").forEach(button => {
         button.addEventListener("click", async function () {
             let replyInput = this.previousElementSibling;
@@ -146,22 +143,20 @@ function activateInteraction() {
         });
     });
 
-    // 点击 "Show Replies" 按钮时显示回复
     document.querySelectorAll(".show-btn").forEach(button => {
         button.addEventListener("click", function () {
             let fbID = this.getAttribute("data-fbID");
             let repliesContainer = document.getElementById(`replies-container-${fbID}`);
-            repliesContainer.style.display = "block";  // 显示回复容器
-            displayReplies(fbID); // 调用显示回复的函数
+            repliesContainer.style.display = "block";  
+            displayReplies(fbID); 
         });
     });
 }
 
 
-// 获取并显示该反馈的所有回复
 async function displayReplies(fbID) {
     const repliesContainer = document.getElementById(`replies-container-${fbID}`);
-    repliesContainer.innerHTML = "";  // 清空现有的回复内容
+    repliesContainer.innerHTML = ""; 
 
     console.log("Fetching replies for feedback ID:", fbID);
 
@@ -182,7 +177,7 @@ async function displayReplies(fbID) {
 
             repliesContainer.innerHTML += `
                 <div class="reply-item">
-                    <p><strong>${replyText}:</strong></p>
+                    <p><strong>${replyText}</strong></p>
                     <p><em>Replied at: ${repliedAt}</em></p>
                 </div>
             `;
