@@ -436,6 +436,11 @@ function fetchFeedbackData() {
     </div>
     `;
 
+    document.getElementById("close-feedback-widget").addEventListener("click", function() {
+        const feedbackWidget = document.getElementById("feedback-widget");
+        feedbackWidget.classList.add("hide");
+    });
+
     document.getElementById("submit-feedback").addEventListener("click", function () {
         var email = localStorage.getItem("loggedInUser");
         const feedback = getElementVal('feedback-input');
