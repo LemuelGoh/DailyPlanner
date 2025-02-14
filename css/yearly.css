@@ -1,16 +1,16 @@
 .yearly-calendar {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns for 3 months per row */
-    gap: 20px; /* Space between months */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px;
     justify-content: center;
-    max-width: 1200px; /* Adjust to your preference */
-    margin: 0 auto; /* Center the calendar on the page */
+    max-width: 1200px; 
+    margin: 0 auto; 
 }
 
 #yearlyCalendarContainer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns for 3 months per row */
-    gap: 20px; /* Space between months */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; 
     justify-content: center;
     padding: 50px;
 }
