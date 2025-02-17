@@ -94,13 +94,14 @@ document.getElementById("logout-btn").addEventListener('click', function() {
 
   function showUsers() {
     
-    db.collection("online_users")
-      .where("isOnline", "==", true) 
+    db.collection("users")
+      .where("status", "==", "Activated")
       .onSnapshot((snapshot) => {
         const onlineCount = snapshot.size; 
-        document.getElementById("online-users-count").innerText = onlineCount; 
+        document.getElementById("activate-users-count").innerText = onlineCount; 
       });
   }
+  
   let feedbackData = [];
 
   function showEmails(data) {
