@@ -526,7 +526,7 @@ document.getElementById("delete-account").addEventListener("click", function () 
 });
 // DELETE ACCOUNT BUTTON ----------------------------------------------------------------------------------------
 
-
+// subscribe-premium
 document.getElementById("subscribe-premium").addEventListener("click", async function() {
     const email = localStorage.getItem("loggedInUser"); // Get logged-in user email
 
@@ -561,6 +561,7 @@ document.getElementById("subscribe-premium").addEventListener("click", async fun
     }
 });
 
+// subscribe-normal
 document.getElementById("subscribe-normal").addEventListener("click", async function() {
     const email = localStorage.getItem("loggedInUser"); // Get logged-in user email
 

@@ -3,7 +3,7 @@ const options = { timeZone: 'Asia/Kuala_Lumpur', year: "numeric", month: "long",
 const dayDisplay = document.getElementById("dayDisplay");
 console.log(dayDisplay);
 
-
+// sessionStorage是从一个页面跳转到另一个页面时，数据存储在sessionStorage中，关闭页面数据就会被清除 从monthly calendar或者yearly calendar选的日期存在里面 来跳去daily calendar那个日期的数据
 //sync with tdy or redirect date from month/year
 if(sessionStorage.getItem("storageRedirectDate")==currentDate.toLocaleDateString('en-US', options)) { //if redirect date is tdy
     dayDisplay.textContent = currentDate.toLocaleDateString('en-US', options);
@@ -22,6 +22,7 @@ const tasks = [
     { date: "-1", time: "-1", description: "-1", priority:"-1",completed:"-1",repeat:"-1", uid:"-1"},
 ];
 
+// 转换日期格式为 YYYY-MM-DD
 function formatDateToYYYYMMDD(dayDisplay) {
     const date = new Date(dayDisplay);
     
@@ -33,11 +34,12 @@ function formatDateToYYYYMMDD(dayDisplay) {
 }
 
 
-
+// 显示日期
 date = document.getElementById("dayDisplay").textContent;
 const selectedDate = formatDateToYYYYMMDD(date);
 console.log(selectedDate);
 
+// 获取选定日期的任务
 function fetchDayTasks(selectedDate) {
     const email = localStorage.getItem("loggedInUser");
 
@@ -68,6 +70,7 @@ function fetchDayTasks(selectedDate) {
         });
 }
 
+// 生成时间轴 把那个时间的任务显示出来
 function generateTimeline(dayTasks) {
     const timeline = document.getElementById("timeline");
     timeline.innerHTML = "";
@@ -157,7 +160,7 @@ document.getElementById("add-tasks-btn").addEventListener("click", function() {
     addtask();
 });
 
-
+// add task的function都是在这里
 // ADD TASK BUTTON ----------------------------------------------------------------------------------------
 async function addtask() {
     const addtaskWidget = document.getElementById("addtask-widget");
@@ -234,7 +237,7 @@ async function addtask() {
     `;
 
     var email = localStorage.getItem("loggedInUser");
-
+// 用email来找特定的database 然后存进去所有的task数据
     if (email) {
         try {
             // Retrieve user details (MUST use await)
@@ -435,7 +438,6 @@ async function edittask(taskId) {
 
             if (email) {
                 try {
-                    // Retrieve user details (MUST use await)
                     const userSnapshot = await db.collection("users").where("email", "==", email).get();
                     
                     if (!userSnapshot.empty) {
