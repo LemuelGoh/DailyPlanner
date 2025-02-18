@@ -7,11 +7,11 @@ const firebaseConfig = {
   appId: "1:638721515088:web:9f4208ac42875abcacfb55"
 };
 
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ✅ Slideshow Feedback for `index.html`
+
 document.addEventListener("DOMContentLoaded", async function () {
   const carouselInner = document.getElementById("feedback-container");
 
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               carouselInner.appendChild(carouselItem);
           });
 
-          // Add event listener to buttons
+          
           const checkAllButtons = document.querySelectorAll('.checkAllBtn');
           checkAllButtons.forEach(button => {
               button.addEventListener('click', () => {
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 
-// ✅ Improved Feedback Display for `helpdesk.html` or other pages
+
 document.addEventListener("DOMContentLoaded", async function () {
     const allFeedbackContainer = document.getElementById("all-feedback-container");
 
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                const fbID = doc.id; // 获取反馈文档的唯一 ID
+                const fbID = doc.id; 
 
                 const feedbackItem = document.createElement("div");
                 feedbackItem.classList.add("feedback-item");
@@ -77,7 +77,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 </div>
                 <p class="feedback-text">${data.feedback}</p>
                 <div class="feedback-actions">
-                    <button class="like-btn">👍 Like <span class="like-count">0</span></button>
                     <button class="reply-btn option-button">💬 Reply</button>
                 </div>
                 <div class="reply-section" style="display: none;">
@@ -118,7 +117,6 @@ function activateInteraction() {
                 let replyText = replyInput.value;
 
                 try {
-                    // 将回复添加到单独的 `replies` 集合
                     await db.collection("replies").add({
                         feedbackId: feedbackId,
                         replyText: replyText,
@@ -126,13 +124,12 @@ function activateInteraction() {
                         email: localStorage.getItem("loggedInUser")
                     });
 
-                    // 更新 `feedback` 文档中的 `repliesCount`
                     await db.collection("feedback").doc(feedbackId).update({
                         repliesCount: firebase.firestore.FieldValue.increment(1)
                     });
 
                     alert("Reply Sent: " + replyText);
-                    replyInput.value = ""; // 清空输入框
+                    replyInput.value = ""; 
                 } catch (error) {
                     console.error("Error sending reply: ", error);
                     alert("Error submitting reply.");
@@ -147,9 +144,17 @@ function activateInteraction() {
         button.addEventListener("click", function () {
             let fbID = this.getAttribute("data-fbID");
             let repliesContainer = document.getElementById(`replies-container-${fbID}`);
-            repliesContainer.style.display = "block";  
-            displayReplies(fbID); 
+        
+            if (repliesContainer.style.display === "none" || repliesContainer.style.display === "") {
+                repliesContainer.style.display = "block"; 
+                displayReplies(fbID);
+                this.textContent = "Hide Replies"; 
+            } else {
+                repliesContainer.style.display = "none"; 
+                this.textContent = "Show Replies"; 
+            }
         });
+        
     });
 }
 
@@ -189,9 +194,6 @@ async function displayReplies(fbID) {
 
 
 
-
-
-// ✅ Ensure "Go Back" button only works if it exists
 document.addEventListener("DOMContentLoaded", function () {
   const goBackBtn = document.getElementById("goback-btn");
   if (goBackBtn) {
